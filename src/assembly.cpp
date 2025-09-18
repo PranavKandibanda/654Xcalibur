@@ -51,9 +51,9 @@ void Assembly::control() {
 // Spins intake forward if L1 is being held, reverse if L2 is being held; stops otherwise
 void Assembly::intake_motors_control() {
     if (Controller.ButtonL1.pressing()) {
-        main_intake_motor.spin(fwd, 7.5, volt);
+        main_intake_motor.spin(reverse, 12, volt);
         color_sense_motor.spin(reverse, 12, volt);
-        front_intake_motor.spin(fwd, 12, volt);
+        front_intake_motor.spin(reverse, 12, volt);
     } else {
         intake.stop(brake);
         main_intake_motor.stop(brake);

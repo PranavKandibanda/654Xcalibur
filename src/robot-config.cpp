@@ -51,12 +51,12 @@ Chassis chassis(
 
 Assembly assembly(
 	mik::motor_group({
-		mik::motor(PORT16, true, green_18_1, "main_intake_motor"),
-		mik::motor(PORT8,  true, green_18_1, "color_sense_motor"),
+		mik::motor(PORT9, true, green_18_1, "main_intake_motor"),
+		mik::motor(PORT8,  false, green_18_1, "color_sense_motor"),
 		mik::motor(PORT7,  true, green_18_1, "front_intake_motor")
 	}),
-	mik::motor(PORT16, true, green_18_1, "main_intake_motor"),
-	mik::motor(PORT8,  true, green_18_1, "color_sense_motor"),
+	mik::motor(PORT9, true, green_18_1, "main_intake_motor"),
+	mik::motor(PORT8,  false, green_18_1, "color_sense_motor"),
 	mik::motor(PORT7,  true, green_18_1, "front_intake_motor")
 	// Optional (commented out):
 	// , mik::motor(PORTXX, true, green_18_1, "lower_intake_motor")
@@ -70,11 +70,12 @@ void log_motors() {
 		// Add all mik motor groups in here
 		chassis.left_drive, 
 		chassis.right_drive, 
-		/*assembly.lift_arm_motors*/
     }, 
 	{
 		// Add all mik motors in here
-		/*assembly.intake_motor*/
+		assembly.main_intake_motor,
+		assembly.color_sense_motor,
+		assembly.front_intake_motor
     }
   );
 }

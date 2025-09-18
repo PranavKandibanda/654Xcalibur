@@ -21,8 +21,6 @@ public:
     void intake_motors_control();
     void long_piston_control();
 
-    int lift_arm_position = IDLE;
-    vex::task lift_task;
     
     mik::motor_group intake;
     mik::motor main_intake_motor;

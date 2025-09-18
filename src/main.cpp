@@ -28,14 +28,13 @@ void user_control(void) {
 
     // How you want your drivetrain to stop during driver
     chassis.set_brake_type(brakeType::coast);
-    
     assembly.init();
 
     while (true) {
         if (!control_disabled()) {
             // Add your user control code here
             chassis.control(drive_mode::SPLIT_ARCADE);
-            /*assembly.control();*/
+            assembly.control();
         }
         task::sleep(5);
     }
