@@ -54,7 +54,13 @@ void Assembly::intake_motors_control() {
         main_intake_motor.spin(reverse, 12, volt);
         color_sense_motor.spin(reverse, 12, volt);
         front_intake_motor.spin(reverse, 12, volt);
-    } else {
+    } 
+    else if (Controller.ButtonL2.pressing()) {
+        main_intake_motor.spin(forward, 12, volt);
+        color_sense_motor.spin(forward, 12, volt);
+        front_intake_motor.spin(forward, 12, volt);
+    }
+    else {
         intake.stop(brake);
         main_intake_motor.stop(brake);
         color_sense_motor.stop(brake);
