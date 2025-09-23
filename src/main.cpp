@@ -1,4 +1,5 @@
 #include "vex.h"
+#include "PistonAssembly.h"
 
 using namespace vex;
 using namespace mik;
@@ -28,13 +29,28 @@ void user_control(void) {
 
     // How you want your drivetrain to stop during driver
     chassis.set_brake_type(brakeType::coast);
-    assembly.init();
+    intakeAssembly.init();
 
+    static bool lastR1 = false, lastR2 = false, lastUp = false;
     while (true) {
         if (!control_disabled()) {
-            // Add your user control code here
             chassis.control(drive_mode::SPLIT_ARCADE);
-            assembly.control();
+            intakeAssembly.control();
+
+            // Toggle hook with R1
+            bool r1 = Controller.ButtonR1.pressing();
+            if (r1 && !lastR1) hook.toggle();
+            lastR1 = r1;
+
+            // Toggle scraper with R2
+            bool r2 = Controller.ButtonR2.pressing();
+            if (r2 && !lastR2) scraper.toggle();
+            lastR2 = r2;
+
+            // Toggle park with Up
+            bool up = Controller.ButtonUp.pressing();
+            if (up && !lastUp) park.toggle();
+            lastUp = up;
         }
         task::sleep(5);
     }

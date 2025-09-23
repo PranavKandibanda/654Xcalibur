@@ -1,5 +1,5 @@
 #include "vex.h"
-
+#include "PistonAssembly.h"
 using namespace vex;
 using namespace mik;
 
@@ -17,7 +17,7 @@ bool force_calibrate_inertial = false;
 // the inertial sensor and vibrate the controller. The lower the value the less likelihood
 // of a failed calibration.
 static const float MINIMUN_INERTIAL_CALIBRATION_ERROR = .05;
-
+//USED PORTS: 1,3,4,5,6,7,8,9,12,15,18,19
 Chassis chassis(
 	// Drivetrain motors
 	mik::motor_group({
@@ -49,7 +49,7 @@ Chassis chassis(
 	mik::distance_reset({})
 );
 
-Assembly assembly(
+IntakeAssembly intakeAssembly(
 	mik::motor_group({
 		mik::motor(PORT9, true, green_18_1, "main_intake_motor"),
 		mik::motor(PORT8,  false, green_18_1, "color_sense_motor"),
@@ -57,13 +57,19 @@ Assembly assembly(
 	}),
 	mik::motor(PORT9, true, green_18_1, "main_intake_motor"),
 	mik::motor(PORT8,  false, green_18_1, "color_sense_motor"),
-	mik::motor(PORT7,  true, green_18_1, "front_intake_motor")
-	// Optional (commented out):
-	// , mik::motor(PORTXX, true, green_18_1, "lower_intake_motor")
-	// , vex::rotation(PORT11)
-	// , mik::piston(PORT_A)
+	mik::motor(PORT7,  true, green_18_1, "front_intake_motor"),
+	vex::optical(PORT16) //REPLACE LATER WITH ACTUAL PORT
 );
 
+// Create pistons first
+mik::piston park_piston(PORT_C, false);
+mik::piston hook_piston(PORT_A, false);
+mik::piston scraper_piston(PORT_E, false);
+
+// Create assemblies with piston references
+ParkAssembly park(park_piston);
+HookAssembly hook(hook_piston);
+ScraperAssembly scraper(scraper_piston);
 /** Allows UI to display all motor values */
 void log_motors() {
     config_add_motors({
@@ -73,9 +79,9 @@ void log_motors() {
     }, 
 	{
 		// Add all mik motors in here
-		assembly.main_intake_motor,
-		assembly.color_sense_motor,
-		assembly.front_intake_motor
+		intakeAssembly.main_intake_motor,
+		intakeAssembly.color_sense_motor,
+		intakeAssembly.front_intake_motor
     }
   );
 }
