@@ -1,5 +1,8 @@
 #include "vex.h"
 #include "IntakeAssembly.h"
+#include "robot-config.h" // for hook
+#include "PistonAssembly.h"
+#include "mikLib/globals.h" // for alliance_is_red
 
 using namespace vex;
 
@@ -18,7 +21,6 @@ IntakeAssembly::IntakeAssembly(
 {}
 
 void IntakeAssembly::init() {
-    
 }
 
 void IntakeAssembly::control() {
@@ -27,41 +29,41 @@ void IntakeAssembly::control() {
 
 // Requires: #include "mikLib/UI/UI_manager.h" for auton_scr
 void IntakeAssembly::intake_motors_control() {
-    // Get alliance color from auton_scr->red_blue (true=red, false=blue)
-    bool is_red_alliance = false;
-    #ifdef AUTON_SCR_AVAILABLE
-    is_red_alliance = auton_scr->red_blue;
-    #endif
-
-    static uint32_t last_color_check_time = 0;
-    const uint32_t color_check_delay = 500; // ms
-    uint32_t now = vex::timer::system();
+    // Get alliance color from global (true=red, false=blue)
+    bool is_red_alliance = mik::alliance_is_red;
 
     if (Controller.ButtonL1.pressing()) {
-        main_intake_motor.spin(reverse, 12, volt);
-        color_sense_motor.spin(reverse, 12, volt);
-        front_intake_motor.spin(reverse, 12, volt);
-        // No delay logic for manual reverse
-    } 
-    else if (Controller.ButtonL2.pressing()) {
+        // Always pull game pieces in with the main and front intakes
         main_intake_motor.spin(forward, 12, volt);
         front_intake_motor.spin(forward, 12, volt);
-
-        // Only check color and control color_sense_motor every color_check_delay ms
-        if (now - last_color_check_time >= color_check_delay) {
-            last_color_check_time = now;
-            vex::color detected = color_sensor.color();
-            bool is_item_red = (detected == vex::color::red);
-            bool is_item_blue = (detected == vex::color::blue);
-
-            if ((is_red_alliance && !is_item_red) || (!is_red_alliance && !is_item_blue)) {
-                // Item is NOT alliance color: spin backwards
-                color_sense_motor.spin(reverse, 12, volt);
-            } else {
-                // Item matches alliance color: spin forward
-                color_sense_motor.spin(forward, 12, volt);
+        color_sensor.setLightPower(100);
+        color_sensor.setLight(vex::ledState::on);
+        if (hook.extended) {
+            // Hold roller still if hook is engaged
+            if(color_sensor.isNearObject())
+            {
+                color_sense_motor.spin(forward, 6, volt);
+                vex::task::sleep(100);
+                color_sense_motor.stop(brake);
             }
-        } // else: do not change color_sense_motor state
+        } else {
+            // Simple hue check to decide if this piece matches our alliance
+            double hue = color_sensor.hue(); // 0-360
+            bool same_color = is_red_alliance
+                ? (hue >= 20 && hue <= 40)      // red band
+                : (hue >= 160 && hue <= 200);   // blue band
+
+            if (same_color) {
+                color_sense_motor.spin(forward, 12, volt);
+            } else {
+                color_sense_motor.spin(reverse, 12, volt);
+            }
+        }
+    } 
+    else if (Controller.ButtonL2.pressing()) {
+        main_intake_motor.spin(reverse, 12, volt);
+        front_intake_motor.spin(reverse, 12, volt);
+        color_sense_motor.spin(reverse,12,volt);
     }
     else {
         intake.stop(brake);

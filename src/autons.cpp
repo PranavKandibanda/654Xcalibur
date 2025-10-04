@@ -2,6 +2,8 @@
 
 using namespace vex;
 using namespace mik;
+#include "mikLib/globals.h"
+#include "robot-config.h"
 
 void default_constants(void) {
     chassis.set_control_constants(5, 10, 1.019, 5, 10, 1.019);
@@ -76,10 +78,7 @@ std::string blue_left_winpoint(bool calibrate, auto_variation var, bool get_name
     if (get_name) { return "blue left winpoint"; }
     if (calibrate) {
         chassis.set_coordinates(0, 0, 0);
-
-        return "";
     }
-
     return "";
 }
 std::string blue_left_sawp(bool calibrate, auto_variation var, bool get_name) { 

@@ -1,8 +1,10 @@
 #include "vex.h"
 #include "PistonAssembly.h"
+#include "mikLib/globals.h"
 
 using namespace vex;
 using namespace mik;
+
 
 task UI;
 
@@ -39,7 +41,10 @@ void user_control(void) {
 
             // Toggle hook with R1
             bool r1 = Controller.ButtonR1.pressing();
-            if (r1 && !lastR1) hook.toggle();
+            if (r1 && !lastR1)
+            {
+                hook.toggle();
+            }
             lastR1 = r1;
 
             // Toggle scraper with R2

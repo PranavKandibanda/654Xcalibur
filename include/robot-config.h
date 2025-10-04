@@ -1,3 +1,4 @@
+#pragma once
 #include "vex.h"
 class motor;
 class motor_group;
@@ -23,6 +24,9 @@ extern ScraperAssembly scraper;
 void init(void);
 void calibrate_inertial(void);
 
-void disable_user_control(bool stop_all_motors_ = false);
+void disable_user_control(bool stop_all_motors_);
 void enable_user_control(void);
 bool control_disabled(void);
+
+// Convenience inline to preserve previous default argument usage
+inline void disable_user_control() { disable_user_control(false); }

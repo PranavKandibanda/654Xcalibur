@@ -1,6 +1,8 @@
 #pragma once
 
+// Minimal VEX includes needed for gear settings without pulling in the full project aggregator
 #include "v5.h"
+#include "v5_vcs.h"
 #include "v5_api.h"
 
 namespace mik {
@@ -83,6 +85,9 @@ namespace mik {
     enum class input_type { CONTROLLER, TOUCHSCREEN };
     enum class text_align { LEFT, CENTER };
     enum class autons { RED_BLUE, RINGS_GOAL, QUALS_ELIMS, OFF_SAWP, OFF_SKILLS };
+
+    // Alliance color (true = red, false = blue)
+    extern bool alliance_is_red;
 
     #define UI_Graphic_ID    1
     #define UI_Background_ID 2

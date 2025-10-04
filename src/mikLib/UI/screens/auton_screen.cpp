@@ -1,4 +1,5 @@
 #include "vex.h"
+#include "mikLib/globals.h"
 
 using namespace mik;
 using namespace vex;
@@ -215,7 +216,7 @@ void UI_auton_screen::UI_crt_auton_scr() {
             UI_crt_cir(1.19, .6, .25, .25, "#FFFFFF", UI_distance_units::inches),
         })
     );
-    red_blue_tgl->set_callback([this](){  UI_select_auton(autons::RED_BLUE); flip_toggle_controller({0, 0}, red_blue); save_auton_SD(); }, false);
+    red_blue_tgl->set_callback([this](){  UI_select_auton(autons::RED_BLUE); flip_toggle_controller({0, 0}, red_blue); mik::alliance_is_red = red_blue; save_auton_SD(); }, false);
     
     rings_goal_tgl = UI_crt_tgl(UI_crt_grp({
         UI_crt_cir(1.19, 1.1, .25, .25, "#6410a4", UI_distance_units::inches),
@@ -342,6 +343,7 @@ void UI_auton_screen::UI_select_auton(autons auton) {
     case autons::RED_BLUE:
         auto_max_time = 15;
         red_blue = !red_blue;
+        mik::alliance_is_red = red_blue;
         break;
         case autons::RINGS_GOAL:
         auto_max_time = 15;

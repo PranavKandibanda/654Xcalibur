@@ -34,7 +34,7 @@ Chassis chassis(
 	PORT18, // Inertia sensor port
 	360,    // Inertial scale
 
-	PORT19, // Forward tracker port
+	PORT20, // Forward tracker port
 	-2,     // Forward tracker wheel diameter
 	0,      // Forward tracker center distance
 
@@ -55,16 +55,16 @@ IntakeAssembly intakeAssembly(
 		mik::motor(PORT8,  false, green_18_1, "color_sense_motor"),
 		mik::motor(PORT7,  true, green_18_1, "front_intake_motor")
 	}),
-	mik::motor(PORT9, true, green_18_1, "main_intake_motor"),
-	mik::motor(PORT8,  false, green_18_1, "color_sense_motor"),
-	mik::motor(PORT7,  true, green_18_1, "front_intake_motor"),
-	vex::optical(PORT16) //REPLACE LATER WITH ACTUAL PORT
+	mik::motor(PORT9, false, green_18_1, "main_intake_motor"),
+	mik::motor(PORT8,  true, green_18_1, "color_sense_motor"),
+	mik::motor(PORT7,  false, green_18_1, "front_intake_motor"),
+	vex::optical(PORT19)
 );
 
 // Create pistons first
 mik::piston park_piston(PORT_C, false);
 mik::piston hook_piston(PORT_A, false);
-mik::piston scraper_piston(PORT_E, false);
+mik::piston scraper_piston(PORT_B, false);
 
 // Create assemblies with piston references
 ParkAssembly park(park_piston);
