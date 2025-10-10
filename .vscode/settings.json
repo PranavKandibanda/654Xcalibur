@@ -50,6 +50,7 @@
 		"system_error": "cpp",
 		"thread": "cpp",
 		"cstddef": "cpp",
-		"random": "cpp"
+		"random": "cpp",
+		"optional": "cpp"
 	}
 }
