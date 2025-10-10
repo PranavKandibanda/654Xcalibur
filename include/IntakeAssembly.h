@@ -16,6 +16,7 @@ public:
     void control();
 
     void intake_motors_control();
+    void color_sort();
     void long_piston_control();
 
     // Configuration

@@ -4,15 +4,16 @@ using namespace vex;
 using namespace mik;
 #include "mikLib/globals.h"
 #include "robot-config.h"
+#include "PistonAssembly.h"
 
 void default_constants(void) {
     chassis.set_control_constants(5, 10, 1.019, 5, 10, 1.019);
 
     // Each constant set is in the form of (maxVoltage, kP, kI, kD, startI).
-    chassis.set_turn_constants(12, .437, .0215, 3.686, 15);
-    chassis.set_drive_constants(10, 1.5, 0, 10, 0);
-    chassis.set_heading_constants(6, .4, 0, 1, 0);
-    chassis.set_swing_constants(12, .437, .0295, 3.486, 15);
+    chassis.set_turn_constants(12, .247, .011, 1.586, 15);
+    chassis.set_drive_constants(12, 1.3, 0.02, 7.5, 3);
+    chassis.set_heading_constants(6, .3, .1, 3, 0);
+    chassis.set_swing_constants(12, .337, .0095, 3.486, 15);
 
     // Each exit condition set is in the form of (settle_error, settle_time, timeout).
     chassis.set_turn_exit_conditions(1.5, 75, 2000);
@@ -20,6 +21,55 @@ void default_constants(void) {
     chassis.set_swing_exit_conditions(1.25, 75, 3000);
 }
 
+void load()
+{
+    hook.toggle();
+    intakeAssembly.main_intake_motor.spin(forward, 12, volt);
+    intakeAssembly.color_sense_motor.spin(forward, 12, volt);
+    intakeAssembly.front_intake_motor.spin(forward, 12, volt);
+}
+
+void unload(int height)
+{
+    hook.toggle();
+    if (height >1)
+    {
+        intakeAssembly.main_intake_motor.spin(forward, 12, volt);
+        intakeAssembly.color_sense_motor.spin(forward, 12, volt);
+        if (height == 3)
+        {
+            intakeAssembly.front_intake_motor.spin(forward, 12, volt);
+        }
+        if (height == 2)
+        {
+            intakeAssembly.front_intake_motor.spin(reverse, 12, volt);
+        }
+    }
+    else
+    {
+        intakeAssembly.main_intake_motor.spin(reverse, 12, volt);
+        intakeAssembly.color_sense_motor.spin(reverse, 12, volt);
+        intakeAssembly.front_intake_motor.spin(reverse, 12, volt);
+    }
+}
+void scraper_mech(int hump)
+{
+    hook.toggle();
+    intakeAssembly.main_intake_motor.spin(forward, 12, volt);
+    intakeAssembly.color_sense_motor.spin(forward, 12, volt);
+    intakeAssembly.front_intake_motor.spin(forward, 12, volt);
+    chassis.drive_distance(hump, {.max_voltage = 6});
+    chassis.drive_distance(-hump, {.max_voltage = 6});
+    chassis.drive_distance(hump, {.max_voltage = 6});
+    chassis.drive_distance(-hump, {.max_voltage = 6});
+}
+
+void stopping(void)
+{
+    intakeAssembly.main_intake_motor.stop(brake);
+    intakeAssembly.color_sense_motor.stop(brake);
+    intakeAssembly.front_intake_motor.stop(brake);
+}
 void odom_constants(void) {
     default_constants();
     chassis.heading_max_voltage = 10;
@@ -41,11 +91,11 @@ std::string template_auto(bool calibrate, auto_variation var, bool get_name) {
     if (calibrate) {
         /* Initialize robots starting position "https://path.jerryio.com/" and/or add extra movements to line up robots 
         starting position **IF MOVING DURING CALIBRATION DO BEFORE FIELD CONTROLLER PLUG IN** */
-        chassis.set_coordinates(55, 23.5, 90);
+        chassis.set_coordinates(57.34, -16.506, 0);
     
         /* Example of turning before auto is ran */
-        chassis.turn_max_voltage = 6; 
-        chassis.turn_to_angle(45);
+        //chassis.turn_max_voltage = 6; 
+        //chassis.turn_to_angle(45);
 
         return "";
     }
@@ -77,8 +127,29 @@ std::string template_auto_other_variation(bool calibrate, bool get_name) {
 std::string blue_left_winpoint(bool calibrate, auto_variation var, bool get_name) {
     if (get_name) { return "blue left winpoint"; }
     if (calibrate) {
-        chassis.set_coordinates(0, 0, 0);
+        chassis.set_coordinates(53.843, -16.374, 180); //try 180 later when testing
+        return "";
     }
+    odom_constants();
+
+    chassis.drive_to_point(53.99,-47.338);
+    chassis.turn_to_point(62.79,-47.338);
+    chassis.drive_to_point(65.79,-47.338);
+    scraper.toggle();
+    scraper_mech(10);
+    stopping();
+    scraper.toggle();
+    chassis.drive_to_point(29.039,-47.338);
+    unload(3);
+    stopping();
+    chassis.drive_to_point(38.61,-47.338);
+    chassis.turn_to_point(22.545,-22.729);
+    load();
+    chassis.drive_to_point(22.545,-22.729, {.max_voltage = 6});
+    stopping();
+    chassis.turn_to_point(10.241,-10.425,{.angle_offset = 180});
+    chassis.drive_to_point(10.241,-10.425);
+    unload(2);
     return "";
 }
 std::string blue_left_sawp(bool calibrate, auto_variation var, bool get_name) { 
@@ -108,6 +179,7 @@ std::string blue_right_winpoint(bool calibrate, auto_variation var, bool get_nam
 
         return "";
     }
+
 
     return "";
 }
@@ -166,7 +238,6 @@ std::string red_right_winpoint(bool calibrate, auto_variation var, bool get_name
     if (get_name) { return "red right winpoint"; }
     if (calibrate) {
         chassis.set_coordinates(0, 0, 0);
-        
         return "";
     }
 

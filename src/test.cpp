@@ -2,9 +2,9 @@
 
 using namespace vex;
 using namespace mik;
-
 void relative_mode_constants() {
   	default_constants();
+	chassis.set_drive_constants(10,1.3,0.02,7.5,3);
 }
 
 void odom_mode_constants() {

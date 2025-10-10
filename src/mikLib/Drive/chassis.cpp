@@ -13,7 +13,7 @@ drive_to_pose_params g_drive_to_pose_params_buffer{};
 follow_path_params g_follow_path_params_buffer{};
 
 Chassis::Chassis(mik::motor_group left_drive, mik::motor_group right_drive, int inertial_port, float inertial_scale, int forward_tracker_port, float forward_tracker_diameter, 
-    float forward_tracker_center_distance, int sideways_tracker_port, float sideways_tracker_diameter, float sideways_tracker_center_distance, mik::distance_reset reset_sensors):
+    float forward_tracker_center_distance, int sideways_tracker_port, float sideways_tracker_diameter, float sideways_tracker_center_distance/* mik::distance_reset reset_sensors*/):
     
     forward_tracker(forward_tracker_port),
     sideways_tracker(sideways_tracker_port),
@@ -272,7 +272,6 @@ void Chassis::split_arcade_curved() {
 void Chassis::split_arcade() {
     float throttle = deadband(vex::controller(vex::primary).Axis3.value(), control_throttle_deadband);
     float turn = deadband(vex::controller(vex::primary).Axis1.value(), control_turn_deadband);
-    throttle = -throttle;
     chassis.left_drive.spin(vex::fwd, percent_to_volt(throttle + turn), volt);
     chassis.right_drive.spin(vex::fwd, percent_to_volt(throttle - turn), volt);
 }

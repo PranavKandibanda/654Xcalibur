@@ -17,36 +17,36 @@ bool force_calibrate_inertial = false;
 // the inertial sensor and vibrate the controller. The lower the value the less likelihood
 // of a failed calibration.
 static const float MINIMUN_INERTIAL_CALIBRATION_ERROR = .05;
-//USED PORTS: 1,3,4,5,6,7,8,9,12,15,18,19
+//USED PORTS: 1,3,4,5,6,7,8,9,12,15,18,19,20
 Chassis chassis(
 	// Drivetrain motors
 	mik::motor_group({
-		mik::motor(PORT4, true, blue_6_1, "left_front_motor"), 
-		mik::motor(PORT5, true, blue_6_1, "left_middle_motor"), 
-		mik::motor(PORT6, true, blue_6_1, "left_back_motor")
+		mik::motor(PORT1, true, blue_6_1, "left_front_motor"), 
+		mik::motor(PORT12, true, blue_6_1, "left_middle_motor"), 
+		mik::motor(PORT3, true, blue_6_1, "left_back_motor")
 	}),
 	mik::motor_group({
-		mik::motor(PORT1, false, blue_6_1, "right_front_motor"), 
-		mik::motor(PORT12, false, blue_6_1, "right_middle_motor"), 
-		mik::motor(PORT3, false, blue_6_1, "right_back_motor")
+		mik::motor(PORT4, false, blue_6_1, "right_front_motor"), 
+		mik::motor(PORT5, false, blue_6_1, "right_middle_motor"), 
+		mik::motor(PORT6, false, blue_6_1, "right_back_motor")
 	}),
 
-	PORT18, // Inertia sensor port
+	PORT11, // Inertia sensor port
 	360,    // Inertial scale
 
-	PORT20, // Forward tracker port
-	-2,     // Forward tracker wheel diameter
-	0,      // Forward tracker center distance
+	PORT2, // Forward tracker port
+	2,     // Forward tracker wheel diameter
+	0,    // Forward tracker center distance
 
 	PORT15, // Sideways tracker port
 	2,      // Sideways tracker wheel diameter
-	0.3,    // Sideways tracker center distance
+	0.3  // Sideways tracker center distance*/
 
 	// Distance sensors (currently none installed)tssax
 	//     // by 5 inches to the right and 3.5 inches forward from the tracking center 
 	//     mik::distance(PORT17, rear_sensor, 5, 3.5)
 	// })
-	mik::distance_reset({})
+	//mik::distance_reset({})
 );
 
 IntakeAssembly intakeAssembly(
@@ -58,7 +58,7 @@ IntakeAssembly intakeAssembly(
 	mik::motor(PORT9, false, green_18_1, "main_intake_motor"),
 	mik::motor(PORT8,  true, green_18_1, "color_sense_motor"),
 	mik::motor(PORT7,  false, green_18_1, "front_intake_motor"),
-	vex::optical(PORT19)
+	vex::optical(PORT16)
 );
 
 // Create pistons first
