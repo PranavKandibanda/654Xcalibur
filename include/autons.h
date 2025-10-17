@@ -7,7 +7,7 @@ void odom_constants(void);
 
 void unload(int height);
 void scraper_mech(int hump);
-void load(void);
+void load(int wait1);
 void stopping(void);
 
 std::string template_auto(bool calibrate , mik::auto_variation var, bool get_name );

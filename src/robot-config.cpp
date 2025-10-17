@@ -58,11 +58,11 @@ IntakeAssembly intakeAssembly(
 	mik::motor(PORT9, false, green_18_1, "main_intake_motor"),
 	mik::motor(PORT8,  true, green_18_1, "color_sense_motor"),
 	mik::motor(PORT7,  false, green_18_1, "front_intake_motor"),
-	vex::optical(PORT16)
+	vex::optical(PORT19)
 );
 
 // Create pistons first
-mik::piston park_piston(PORT_C, false);
+mik::piston park_piston(PORT_C, false); //fix port
 mik::piston hook_piston(PORT_A, false);
 mik::piston scraper_piston(PORT_B, false);
 

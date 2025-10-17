@@ -21,19 +21,7 @@ IntakeAssembly::IntakeAssembly(
 {}
 
 void IntakeAssembly::init() {
-    vex::task _color_sort_task([](){
-        while(1) {
-            // Only run driver intake control when user control is enabled.
-            // During autonomous, the auton code directly commands the intake motors.
-            if (!control_disabled()) {
-                intakeAssembly.intake_motors_control();
-            } else {
-                // Avoid fighting auton; yield CPU a bit when disabled
-                vex::task::sleep(100);
-            }
-        }
-        return 0;
-    });
+    control();
 }
 
 void IntakeAssembly::control() {
@@ -47,8 +35,8 @@ void IntakeAssembly::intake_motors_control() {
         // Always pull game pieces in with the main and front intakes
         main_intake_motor.spin(forward, 12, volt);
         front_intake_motor.spin(forward, 12, volt);
-        color_sensor.setLightPower(100);
         color_sensor.setLight(vex::ledState::on);
+        color_sensor.setLightPower(100);
         // Simple hue check to decide if this piece matches our alliance
         color_sort();
     }
@@ -56,6 +44,12 @@ void IntakeAssembly::intake_motors_control() {
         main_intake_motor.spin(reverse, 12, volt);
         front_intake_motor.spin(reverse, 12, volt);
         color_sense_motor.spin(reverse,12,volt);
+    }
+    else if(Controller.ButtonDown.pressing()) {
+        // Slow outtake for balancing
+        main_intake_motor.spin(reverse, 6, volt);
+        front_intake_motor.spin(reverse, 6, volt);
+        color_sort();
     }
     else {
         main_intake_motor.stop(brake);
@@ -65,9 +59,8 @@ void IntakeAssembly::intake_motors_control() {
     }
 }
 
-void IntakeAssembly::color_sort() {
+void IntakeAssembly::color_sort(bool reverse_sort) {
 // Always pull game pieces in with the main and front intakes
-    bool is_red_alliance = mik::alliance_is_red;
     main_intake_motor.spin(forward, 12, volt);
     front_intake_motor.spin(forward, 12, volt);
     color_sensor.setLightPower(100);
@@ -77,35 +70,43 @@ void IntakeAssembly::color_sort() {
     {
         if(hook.extended)
         {
-            double hue = color_sensor.hue(); // 0-360
-            bool same_color = is_red_alliance
-            ? (hue >= 0 && hue <= 60)      // red band
-            : (hue >= 160 && hue <= 250);   // blue band
-
-            if (same_color) {
-                color_sense_motor.spin(forward, 12, volt);
-                vex::task::sleep(100);
-                color_sense_motor.stop(brake);
-            } else {
-                color_sense_motor.spin(reverse, 12,volt);
-            }
+            color_sort_tech(reverse_sort);
+            
         }
         else
         {
-            double hue = color_sensor.hue(); // 0-360
-            bool same_color = is_red_alliance
-            ? (hue >= 0 && hue <= 60)      // red band
-            : (hue >= 160 && hue <= 250);   // blue band
-
-            if (same_color) {
-                color_sense_motor.spin(forward, 12, volt);
-            } else {
-                color_sense_motor.spin(reverse, 12,volt);
-            }
+            color_sort_tech(reverse_sort);
         }
     }
     else
     {
         color_sense_motor.spin(forward, 12, volt);
+    }
+}
+
+void IntakeAssembly::color_sort_tech(bool reverse_sort)
+{
+    bool is_red_alliance = mik::alliance_is_red;
+    double hue = color_sensor.hue(); // 0-360
+    bool same_color = is_red_alliance
+    ? (hue >= 0 && hue <= 60)      // red band
+    : (hue >= 160 && hue <= 250);   // blue band
+    if (reverse_sort) {
+        if (same_color) {
+        color_sense_motor.spin(reverse, 12, volt);
+        vex::task::sleep(50);
+        color_sense_motor.stop(brake);
+        } else {
+            color_sense_motor.spin(forward, 12,volt);
+        }
+    }
+    else{
+        if (same_color) {
+            color_sense_motor.spin(forward, 12, volt);
+            vex::task::sleep(50);
+            color_sense_motor.stop(brake);
+        } else {
+            color_sense_motor.spin(reverse, 12,volt);
+        }
     }
 }

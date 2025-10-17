@@ -16,7 +16,8 @@ public:
     void control();
 
     void intake_motors_control();
-    void color_sort();
+    void color_sort(bool reverse_sort = false);
+    void color_sort_tech(bool reverse_sort = false);
     void long_piston_control();
 
     // Configuration
