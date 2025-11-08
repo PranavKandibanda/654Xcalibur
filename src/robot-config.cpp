@@ -26,8 +26,8 @@ Chassis chassis(
 		mik::motor(PORT3, true, blue_6_1, "left_back_motor")
 	}),
 	mik::motor_group({
-		mik::motor(PORT4, false, blue_6_1, "right_front_motor"), 
-		mik::motor(PORT5, false, blue_6_1, "right_middle_motor"), 
+		mik::motor(PORT15, false, blue_6_1, "right_front_motor"), 
+		mik::motor(PORT20, false, blue_6_1, "right_middle_motor"), 
 		mik::motor(PORT6, false, blue_6_1, "right_back_motor")
 	}),
 
