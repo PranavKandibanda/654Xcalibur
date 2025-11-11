@@ -52,24 +52,25 @@ Chassis chassis(
 IntakeAssembly intakeAssembly(
 	mik::motor_group({
 		mik::motor(PORT9, true, green_18_1, "main_intake_motor"),
-		mik::motor(PORT8,  false, green_18_1, "color_sense_motor"),
-		mik::motor(PORT7,  true, green_18_1, "front_intake_motor")
+		mik::motor(PORT8,  false, green_18_1, "front_intake_motor"),
+		mik::motor(PORT7,  true, green_18_1, "outake_motor")
 	}),
 	mik::motor(PORT9, false, green_18_1, "main_intake_motor"),
-	mik::motor(PORT8,  true, green_18_1, "color_sense_motor"),
-	mik::motor(PORT7,  false, green_18_1, "front_intake_motor"),
-	vex::optical(PORT19)
+	mik::motor(PORT8,  true, green_18_1, "front_intake_motor"),
+	mik::motor(PORT7,  false, green_18_1, "outake_motor")
 );
 
 // Create pistons first
 mik::piston park_piston(PORT_C, false); //fix port
 mik::piston hook_piston(PORT_A, false);
 mik::piston scraper_piston(PORT_B, false);
+mik::piston change_piston(PORT_B, false);
 
 // Create assemblies with piston references
 ParkAssembly park(park_piston);
 HookAssembly hook(hook_piston);
 ScraperAssembly scraper(scraper_piston);
+ChangeAssembly changePiston(change_piston);
 /** Allows UI to display all motor values */
 void log_motors() {
     config_add_motors({
@@ -80,7 +81,7 @@ void log_motors() {
 	{
 		// Add all mik motors in here
 		intakeAssembly.main_intake_motor,
-		intakeAssembly.color_sense_motor,
+		intakeAssembly.outake_motor,
 		intakeAssembly.front_intake_motor
     }
   );

@@ -21,56 +21,7 @@ void default_constants(void) {
     chassis.set_swing_exit_conditions(1.25, 75, 3000);
 }
 
-void load(int wait1)
-{
-    intakeAssembly.color_sort();
-    /*intakeAssembly.color_sense_motor.spin(forward,12,volt);
-    intakeAssembly.main_intake_motor.spin(forward,12,volt);
-    intakeAssembly.front_intake_motor.spin(forward,12,volt);*/
-}
 
-void unload(int height)
-{
-    if (height >1)
-    {
-        intakeAssembly.main_intake_motor.spin(forward, 12, volt);
-        intakeAssembly.color_sense_motor.spin(forward, 12, volt);
-        if (height == 3)
-        {
-            intakeAssembly.color_sense_motor.spin(forward, 12, volt);
-        }
-        if (height == 2)
-        {
-            intakeAssembly.color_sense_motor.spin(reverse, 12, volt);
-            
-        }
-    }
-    else if (height == 1)
-    {
-        intakeAssembly.main_intake_motor.spin(reverse, 12, volt);
-        intakeAssembly.color_sense_motor.spin(reverse, 12, volt);
-        intakeAssembly.front_intake_motor.spin(reverse, 12, volt);
-    }
-}
-void scraper_mech(int hump)
-{
-    intakeAssembly.main_intake_motor.spin(forward, 12, volt);
-    intakeAssembly.color_sense_motor.spin(forward, 12, volt);
-    intakeAssembly.front_intake_motor.spin(forward, 12, volt);
-    for (int i = 0; i < 3; i++)
-    {
-        chassis.drive_distance(hump, {.max_voltage = 6});
-        chassis.drive_distance(-hump, {.max_voltage = 6});
-    }
-    
-}
-
-void stopping(void)
-{
-    intakeAssembly.main_intake_motor.stop(brake);
-    intakeAssembly.color_sense_motor.stop(brake);
-    intakeAssembly.front_intake_motor.stop(brake);
-}
 void odom_constants(void) {
     default_constants();
     chassis.heading_max_voltage = 10;
@@ -142,54 +93,6 @@ std::string blue_left_winpoint(bool calibrate, auto_variation var, bool get_name
         return "";
     }
     odom_constants();
-    //loader start
-    hook.toggle();
-    chassis.drive_to_point(46.987,-44.338,{.max_voltage = 6});
-    chassis.turn_to_point(59.786,-44.338,{.turn_direction = ccw});
-    scraper.toggle();
-    wait(0.5,sec);
-    chassis.drive_to_point(59.786,-44.338,{.max_voltage = 6});
-    //chassis.drive_distance(4,{.max_voltage=5});
-    scraper_mech(1);
-    load(0);
-    wait(2,sec);
-    stopping();
-    hook.toggle();
-    scraper.toggle();
-    //loader start
-
-    //long goal start
-    chassis.set_coordinates(59.786,-44.338,90);
-    chassis.drive_to_point(28.039,-43.338,{.max_voltage = 3});
-    unload(3);
-    wait(3,sec);
-    stopping();
-    chassis.set_coordinates(28.039,-43.338,90);
-    //long goal start
-
-    //position for middle balls
-    
-    chassis.drive_to_point(38.61,-43.338,{.max_voltage = 6});
-    chassis.turn_to_point(25.995,-25.42);
-
-    load(0);
-    chassis.drive_to_point(24.995,-24.42,{.max_voltage = 2});
-    //stopping();
-    chassis.turn_to_angle(315-5,{.max_voltage=.5});
-    chassis.drive_distance(1,{.max_voltage = 1});
-    chassis.drive_distance(-1,{.max_voltage = 1});
-    chassis.turn_to_angle(315+5,{.max_voltage=.5});
-    chassis.drive_distance(1,{.max_voltage = 1});
-    //position for middle balls
-
-    
-    //scoring middle balls
-    chassis.turn_to_point(14.213,-14.5,{.angle_offset = 180});
-    chassis.drive_to_point(14.713,-14.5,{.max_voltage = 6});
-    unload(2);
-    wait(2,sec);
-    //scoring middle balls
-    
     return "";
 }
 std::string blue_left_sawp(bool calibrate, auto_variation var, bool get_name) { 
@@ -219,50 +122,6 @@ std::string blue_right_winpoint(bool calibrate, auto_variation var, bool get_nam
         return "";
     }
     odom_constants();
-    //loader start
-    hook.toggle();
-    chassis.drive_to_point(46.987,44.338,{.max_voltage = 6});
-    chassis.turn_to_point(59.786,44.338,{.turn_direction = cw});
-    scraper.toggle();
-    
-    wait(0.5,sec);
-    chassis.drive_distance(12.5,{.max_voltage=5});
-    //chassis.drive_distance(4,{.max_voltage=5});
-    scraper_mech(1);
-    load(0);
-    wait(2,sec);
-    stopping();
-    hook.toggle();
-    scraper.toggle();
-    //loader end
-
-    //long goal start
-    chassis.set_coordinates(60.435,44.338,90);
-    chassis.drive_to_point(28.039,44.338,{.max_voltage = 3});
-    unload(3);
-    wait(3,sec);
-    stopping();
-    chassis.set_coordinates(28.039,44.338,90);
-    //long goal end
-
-    //position for middle balls
-    chassis.drive_to_point(38.61,44.338,{.max_voltage = 6});
-    chassis.turn_to_point(25.995,25.42);
-    
-    /*
-    load(0);
-    chassis.drive_to_point(25.995,25.42,{.max_voltage = 2});
-    //stopping();
-    chassis.turn_to_angle(275,{.max_voltage=2,.turn_direction=cw});
-    chassis.turn_to_angle(295,{.max_voltage=2,.turn_direction=ccw});
-    //position for middle balls
-
-    //scoring middle balls
-    chassis.turn_to_point(12.213,-10.5);
-    chassis.drive_to_point(11.713,-10.5);
-    unload(1);
-    wait(2,sec);
-    //scoring middle balls*/
     return "";
 }
 std::string blue_right_sawp(bool calibrate, auto_variation var, bool get_name) { 
@@ -293,35 +152,6 @@ std::string red_left_winpoint(bool calibrate, auto_variation var, bool get_name)
         return "";
     }
     odom_constants();
-    //loader start
-    hook.toggle();
-    chassis.drive_to_point(-46.987,42.7,{.max_voltage = 6});
-    chassis.turn_to_point(-59.786,42.7,{.turn_direction = ccw});
-    scraper.toggle();
-    wait(0.5,sec);
-    chassis.drive_distance(13,{.max_voltage=5});
-    //chassis.drive_distance(4,{.max_voltage=5});
-    scraper_mech(2);
-    scraper.toggle();
-    load(0);
-    wait(2,sec);
-    stopping();
-    hook.toggle();
-    //loader start
-
-    //long goal start
-    chassis.set_coordinates(-60.435,42.7,270);
-    chassis.drive_to_point(-28.039,42.7,{.max_voltage = 3});
-    unload(3);
-    wait(3,sec);
-    stopping();
-    chassis.set_coordinates(-28.039,42.7,90);
-    //long goal start
-
-    //position for middle balls
-
-    chassis.drive_to_point(-38.61,42.7,{.max_voltage = 6});
-    chassis.turn_to_point(-25.995,25.42);
     return "";
 }
 std::string red_left_sawp(bool calibrate, auto_variation var, bool get_name) { 
@@ -345,9 +175,6 @@ std::string red_left_elim(bool calibrate, auto_variation var, bool get_name) {
     return "";
 }
 std::string red_right_winpoint(bool calibrate, auto_variation var, bool get_name) { 
-    chassis.mirror_all_auton_x_pos();
-    chassis.mirror_all_auton_angles();
-    blue_left_winpoint(calibrate, var, "red right winpoint");
     return "";
 }
 std::string red_right_sawp(bool calibrate, auto_variation var, bool get_name) {
@@ -372,57 +199,11 @@ std::string red_right_elim(bool calibrate, auto_variation var, bool get_name) {
 }
 
 std::string skills(bool calibrate, auto_variation var, bool get_name) {
-    /*if (get_name) { return "skills"; }
+    if (get_name) { return "skills"; }
     if (calibrate) {
         chassis.set_coordinates(53.99, -16.374, 180); //try 180 later when testing
         return "";
     }
     odom_constants();
-    //loader start
-    hook.toggle();
-    chassis.drive_to_point(46.987,-44.338,{.max_voltage = 6});
-    chassis.turn_to_point(59.786,-44.338,{.turn_direction = ccw});
-    scraper.toggle();
-    wait(0.5,sec);
-    chassis.drive_distance(12.5,{.max_voltage=5});
-    //chassis.drive_distance(4,{.max_voltage=5});
-    scraper_mech(1);
-    load(0);
-    wait(2,sec);
-    stopping();
-    hook.toggle();
-    scraper.toggle();
-    //loader start
-
-    //long goal start
-    chassis.set_coordinates(60.435,-44.338,90);
-    chassis.drive_to_point(28.039,-44.338,{.max_voltage = 3});
-    unload(3);
-    wait(3,sec);
-    stopping();
-    chassis.set_coordinates(28.039,-44.338,90);
-    //long goal start
-
-    //position for middle balls
-    
-    chassis.drive_to_point(38.61,-44.338,{.max_voltage = 6});
-    chassis.turn_to_point(25.995,-25.42);
-
-    /*
-    load(0);
-    chassis.drive_to_point(25.995,-25.42,{.max_voltage = 2});
-    //stopping();
-    chassis.turn_to_angle(275,{.max_voltage=2,.turn_direction=ccw});
-    chassis.turn_to_angle(295,{.max_voltage=2,.turn_direction=ccw});
-    //position for middle balls
-
-    
-    //scoring middle balls
-    chassis.turn_to_point(14.213,-14.5,{.angle_offset = 180});
-    chassis.drive_to_point(14.713,-14.5,{.max_voltage = 6});
-    unload(2);
-    wait(2,sec);
-    //scoring middle balls
-    */
     return "";
 }
