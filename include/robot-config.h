@@ -7,6 +7,7 @@ class PistonAssembly;
 using ParkAssembly = PistonAssembly;
 using HookAssembly = PistonAssembly;
 using ScraperAssembly = PistonAssembly;
+using ChangeAssembly = PistonAssembly;
 
 extern vex::brain Brain;
 extern vex::controller Controller;
@@ -19,7 +20,7 @@ extern IntakeAssembly intakeAssembly;
 extern ParkAssembly park;
 extern HookAssembly hook;
 extern ScraperAssembly scraper;
-
+extern ChangeAssembly changePiston;
 
 void init(void);
 void calibrate_inertial(void);
