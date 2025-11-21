@@ -23,4 +23,6 @@ public:
     mik::motor outake_motor;
     mik::motor front_intake_motor;
     mik::distance ball_sensor;
+    // When true: stop caused by the sensor will use `brake`, otherwise use `coast`.
+    bool brake_when_triggered = true;
 };

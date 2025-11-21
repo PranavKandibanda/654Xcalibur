@@ -18,7 +18,8 @@ static int run_UI() {
 void pre_auton() {
     init();
     default_constants();
-    chassis.forward_tracker.setReversed(true);
+    hook.set(false);
+    changePiston.set(false);
     UI = task(run_UI);
 }
 
@@ -53,12 +54,12 @@ void user_control(void) {
             }
             lastR2 = r2;
 
-            bool A = Controller.ButtonA.pressing();
-            if (A && !lastPark)
+            bool Y = Controller.ButtonY.pressing();
+            if (Y && !lastPark)
             {
                 park.toggle();
             }
-            lastPark = A;
+            lastPark = Y;
 
             bool up = Controller.ButtonUp.pressing();
             if( up && !lastChange)
@@ -67,9 +68,10 @@ void user_control(void) {
             }
             lastChange = up;
         }
-        task::sleep(5);
     }
+        task::sleep(5);
 }
+
 
 int main() {
     Competition.autonomous(auton);

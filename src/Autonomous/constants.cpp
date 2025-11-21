@@ -14,7 +14,7 @@ void default_constants(void) {
 
     // Each exit condition set is in the form of (settle_error, settle_time, timeout).
     chassis.set_turn_exit_conditions(1, 300, 3000);
-    chassis.set_drive_exit_conditions(3, 100, 5000);
+    chassis.set_drive_exit_conditions(3, 150, 5000);
     chassis.set_swing_exit_conditions(1, 300, 3000);
 }
 

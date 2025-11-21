@@ -5,6 +5,8 @@ using namespace mik;
 
 std::string blue_left_winpoint(bool calibrate, mik::auto_variation var, bool get_name) {
     if (get_name) { return "blue left winpoint"; }
+
+    // mirror here 
     if (calibrate) {
         chassis.set_coordinates(53.886, -17.385, 180.054);
         return "";

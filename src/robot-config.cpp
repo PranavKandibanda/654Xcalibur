@@ -35,7 +35,7 @@ Chassis chassis(
 	360,    // Inertial scale
 
 	PORT20, // Forward tracker port
-	2,     // Forward tracker wheel diameter
+	-2,     // Forward tracker wheel diameter
 	.5,    // Forward tracker center distance
 
 	PORT12, // Sideways tracker port
@@ -62,10 +62,10 @@ IntakeAssembly intakeAssembly(
 );
 
 // Create pistons first
-mik::piston park_piston(PORT_G, false); //fix port
-mik::piston hook_piston(PORT_H, false);
+mik::piston park_piston(PORT_E, false); //fix port
+mik::piston hook_piston(PORT_H, true);
 mik::piston scraper_piston(PORT_F, false);
-mik::piston change_piston(PORT_E, false);
+mik::piston change_piston(PORT_G, true);
 
 // Create assemblies with piston references
 ParkAssembly park(park_piston);

@@ -4,7 +4,7 @@ using namespace vex;
 using namespace mik;
 void relative_mode_constants() {
   	default_constants();
-	chassis.set_drive_constants(12, 1.2, 0.083, 7.7, 3);
+	chassis.set_drive_constants(10, 1.38, 0, 8.25, 0);
 }
 
 void odom_mode_constants() {
@@ -153,9 +153,9 @@ static bool testing_odom = false;
 bool config_swap_test_mode() {
 	testing_odom = !testing_odom;
 	if (testing_odom) {
-		odom_constants();
+		odom_mode_constants();
 	} else {
-		default_constants();
+		relative_mode_constants();
 	}
 	return testing_odom;
 }
@@ -229,7 +229,7 @@ void config_tune_heading() {
 
 	int y_min = -30;
 	int y_max = 60;
-	int time_spent_graphing_ms = 5000; 
+	int time_spent_graphing_ms = 3000; 
 
 	graph_scr->set_plot_bounds(y_min, y_max, 0, time_spent_graphing_ms, 1, 1);
 	graph_scr->set_plot({
