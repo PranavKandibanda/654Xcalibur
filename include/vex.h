@@ -33,9 +33,11 @@
 #include "mikLib/Devices/piston.h"
 #include "mikLib/Drive/odom.h"
 #include "mikLib/Drive/PID.h"
-#include "IntakeAssembly.h"
+#include "assembly.h"
 #include "mikLib/Drive/chassis.h"
-#include "autons.h"
+#include "Autonomous/autons.h"
+#include "Autonomous/constants.h"
+#include "Autonomous/macros.h"
 #include "robot-config.h"
 
 #include "mikLib/UI/graphics/drawable.h"
