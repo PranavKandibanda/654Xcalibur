@@ -4,7 +4,11 @@ using namespace vex;
 using namespace mik;
 void relative_mode_constants() {
   	default_constants();
-	chassis.set_drive_constants(10, 1.38, 0, 8.25, 0);
+	//	chassis.set_drive_constants(10, 1.38, 0, 8.25, 0);
+	chassis.set_turn_constants(12, .437, .0215, 3.686, 15);
+	//chassis.set_turn_constants(12, .437, .0215, 3.686, 15);
+
+
 }
 
 void odom_mode_constants() {
@@ -25,7 +29,6 @@ void test_heading() {
 }
 
 void test_turn() {
-	chassis.turn_to_angle(5);
 	chassis.turn_to_angle(30);
 	chassis.turn_to_angle(90);
 	chassis.turn_to_angle(225);
@@ -193,7 +196,7 @@ void config_tune_drive() {
 
 	int y_min = -30;
 	int y_max = 50;
-	int time_spent_graphing_ms = 6000; 
+	int time_spent_graphing_ms = 10000; 
 
 	graph_scr->set_plot_bounds(y_min, y_max, 0, time_spent_graphing_ms, 1, 1);
 	graph_scr->set_plot({actual_plot, set_point_plot}, {{"Actual", 0x002E8B59}, {"SetPoint", 0x00FA8072}});
@@ -229,7 +232,7 @@ void config_tune_heading() {
 
 	int y_min = -30;
 	int y_max = 60;
-	int time_spent_graphing_ms = 3000; 
+	int time_spent_graphing_ms = 1.5; 
 
 	graph_scr->set_plot_bounds(y_min, y_max, 0, time_spent_graphing_ms, 1, 1);
 	graph_scr->set_plot({

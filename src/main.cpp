@@ -18,8 +18,6 @@ static int run_UI() {
 void pre_auton() {
     init();
     default_constants();
-    hook.set(false);
-    changePiston.set(false);
     UI = task(run_UI);
 }
 
@@ -67,9 +65,11 @@ void user_control(void) {
                 changePiston.toggle();
             }
             lastChange = up;
+
         }
-    }
         task::sleep(5);
+    }
+        
 }
 
 

@@ -12,6 +12,7 @@ std::string blue_left_winpoint(bool calibrate, mik::auto_variation var, bool get
         return "";
     }
     // Path
+    default_constants();
     chassis.turn_to_point(53.877, -26.959);
     chassis.drive_to_point(53.877, -26.959);
 

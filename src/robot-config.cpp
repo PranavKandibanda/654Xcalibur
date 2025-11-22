@@ -17,7 +17,7 @@ bool force_calibrate_inertial = false;
 // the inertial sensor and vibrate the controller. The lower the value the less likelihood
 // of a failed calibration.
 static const float MINIMUN_INERTIAL_CALIBRATION_ERROR = .05;
-//USED PORTS: 1,3,4,5,6,7,8,9,12,15,18,19,20
+
 Chassis chassis(
 	// Drivetrain motors
 	mik::motor_group({
@@ -52,20 +52,20 @@ Chassis chassis(
 IntakeAssembly intakeAssembly(
 	mik::motor_group({
 		mik::motor(PORT17, true, blue_6_1, "main_intake_motor"),
+		mik::motor(PORT16,  false, blue_6_1, "outake_motor"),
 		mik::motor(PORT13,  true, blue_6_1, "front_intake_motor"),
-		mik::motor(PORT16,  false, blue_6_1, "outake_motor")
 	}),
 	mik::motor(PORT17, true, blue_6_1, "main_intake_motor"),
-	mik::motor(PORT13,  true, blue_6_1, "front_intake_motor"),
 	mik::motor(PORT16,  false, blue_6_1, "outake_motor"),
+	mik::motor(PORT13,  true, blue_6_1, "front_intake_motor"),
 	mik::distance(PORT18, front_sensor,0,0)
 );
 
 // Create pistons first
 mik::piston park_piston(PORT_E, false); //fix port
-mik::piston hook_piston(PORT_H, true);
+mik::piston hook_piston(PORT_H, false);
 mik::piston scraper_piston(PORT_F, false);
-mik::piston change_piston(PORT_G, true);
+mik::piston change_piston(PORT_G, false);
 
 // Create assemblies with piston references
 ParkAssembly park(park_piston);

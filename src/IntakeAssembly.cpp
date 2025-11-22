@@ -26,7 +26,7 @@ void IntakeAssembly::init() {
     scraper.set(false); // Retract scraper
     hook.set(false);    // Retract hook
     park.set(false);    // Retract park
-    changePiston.set(false); // Retract change piston
+    changePiston.set(true); // Retract change piston
 }
 
 void IntakeAssembly::control() {
@@ -34,7 +34,13 @@ void IntakeAssembly::control() {
 }
 
 void IntakeAssembly::intake_motors_control() {
-    if (Controller.ButtonL1.pressing()) {
+    if (Controller.ButtonA.pressing() && Controller.ButtonL1.pressing())
+    {
+        main_intake_motor.spin(forward, 12, volt);
+        front_intake_motor.spin(forward, 12, volt);
+        outake_motor.spin(reverse,6,volt);
+    }
+    else if (Controller.ButtonL1.pressing()) {
         // Always pull game pieces in with the main and front intakes
         main_intake_motor.spin(forward, 12, volt);
         front_intake_motor.spin(forward, 12, volt);
@@ -42,7 +48,7 @@ void IntakeAssembly::intake_motors_control() {
         // If desired, additional intake-only A behavior can go here
     }
     else if (Controller.ButtonL2.pressing()) {
-        changePiston.set(false);
+        changePiston.set(true);
         main_intake_motor.spin(reverse, 12, volt);
         front_intake_motor.spin(reverse, 12, volt);
         outake_motor.spin(reverse,12,volt);
