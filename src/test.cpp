@@ -4,15 +4,10 @@ using namespace vex;
 using namespace mik;
 void relative_mode_constants() {
   	default_constants();
-	//	chassis.set_drive_constants(10, 1.38, 0, 8.25, 0);
-	chassis.set_turn_constants(12, .437, .0215, 3.686, 15);
-	//chassis.set_turn_constants(12, .437, .0215, 3.686, 15);
-
-
 }
 
 void odom_mode_constants() {
-	  odom_constants();
+	odom_constants();
 }
 
 void test_drive() {
@@ -68,6 +63,7 @@ void test_odom_heading() {
 }
 
 void test_odom_turn() {
+	chassis.set_coordinates(0, 0, 0);
 	chassis.turn_to_point(0.437,  5);
 	chassis.turn_to_point(2.887,  5);
 	chassis.turn_to_point(5, 0);
@@ -96,11 +92,10 @@ void test_odom_full() {
 void test_boomerang() {
 	odom_constants();
 	chassis.set_coordinates(0, 0, 0);
-
 	chassis.drive_to_pose(24, 24, 90, {.lead = .4});
-	chassis.drive_to_pose(24, 0, 0, {.lead = .2});
+	/*chassis.drive_to_pose(24, 0, 0, {.lead = .2});
 	chassis.drive_to_pose(0, 24, 315);
-	chassis.drive_to_pose(0, 0, 0);
+	chassis.drive_to_pose(0, 0, 0);*/
 	}
 
 std::vector<point> path = {

@@ -7,11 +7,7 @@ void intake_forward(void)
 {
     intakeAssembly.main_intake_motor.spin(forward, 100, percent);
     intakeAssembly.front_intake_motor.spin(forward, 100, percent);
-    if (intakeAssembly.ball_sensor.objectDistance(inches) < 1.5) {
-        intakeAssembly.outake_motor.stop(brake);
-    } else {
-        intakeAssembly.outake_motor.spin(forward, 100, percent);
-    }
+    intakeAssembly.outake_motor.spin(reverse, 100, percent);
 }
 
 void intake_reverse(void)
@@ -30,6 +26,8 @@ void intake_stop(void)
 
 void score(void)
 {
+    intakeAssembly.outake_motor.spin(reverse, 100, percent);
+    vex::task::sleep(100);
     intakeAssembly.outake_motor.spin(forward, 100, percent);
     intakeAssembly.main_intake_motor.spin(forward, 100, percent);
     intakeAssembly.front_intake_motor.spin(forward, 100, percent);

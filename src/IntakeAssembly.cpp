@@ -38,7 +38,7 @@ void IntakeAssembly::intake_motors_control() {
     {
         main_intake_motor.spin(forward, 12, volt);
         front_intake_motor.spin(forward, 12, volt);
-        outake_motor.spin(reverse,6,volt);
+        outake_motor.spin(reverse,12,volt);
     }
     else if (Controller.ButtonL1.pressing()) {
         // Always pull game pieces in with the main and front intakes

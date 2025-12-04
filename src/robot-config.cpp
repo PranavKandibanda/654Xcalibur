@@ -36,17 +36,19 @@ Chassis chassis(
 
 	PORT20, // Forward tracker port
 	-2,     // Forward tracker wheel diameter
-	.5,    // Forward tracker center distance
+	1,    // Forward tracker center distance
 
 	PORT12, // Sideways tracker port
 	2,      // Sideways tracker wheel diameter
-	0.5  // Sideways tracker center distance*/
+	0.5,  // Sideways tracker center distance*/
 
 	// Distance sensors (currently none installed)tssax
 	//     // by 5 inches to the right and 3.5 inches forward from the tracking center 
-	//     mik::distance(PORT17, rear_sensor, 5, 3.5)
-	// })
-	//mik::distance_reset({})
+	mik::distance_reset({
+		mik::distance(PORT1, rear_sensor, -3.5, -6),
+		mik::distance(PORT2, right_sensor, -4, 1),
+		mik::distance(PORT3, left_sensor, 3, 1),
+	})
 );
 
 IntakeAssembly intakeAssembly(
