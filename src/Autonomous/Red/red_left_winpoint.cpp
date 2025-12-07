@@ -8,11 +8,54 @@ std::string red_left_winpoint(bool calibrate, mik::auto_variation var, bool get_
 
     // mirror here 
     if (calibrate) {
-        chassis.set_coordinates(-62.093, -16.308, 270);
+        chassis.set_coordinates(-62.093, 16.308, 90);
         return "";
     }
     // Path
+    chassis.drive_max_voltage = 12;
+    chassis.turn_max_voltage = 12;
+    chassis.heading_max_voltage = 6;
+    chassis.swing_max_voltage = 12;
+
     odom_constants();
+    chassis.drive_distance(15.748,{.min_voltage = 6});
+    chassis.turn_to_angle(0);
+    chassis.drive_distance(30.8,{.min_voltage = 6});
+    chassis.turn_to_angle(272,{.max_voltage = 9});
+    scraper.set(true);
+    vex::task::sleep(300);
+    intake_forward();
+    chassis.drive_distance(10.656);
+    scraper.set(false);
+    vex::task::sleep(3000);
+    intake_stop();
+    chassis.drive_distance(-10);
+    intake_reverse();
+    vex::task::sleep(300);
+    intake_stop();
+    chassis.turn_to_angle(93,{.max_voltage=7});
+    chassis.drive_distance(18.1);
+    score();
+    vex::task::sleep(2000);
+    intake_stop();
+
+    chassis.reset_axis(left_sensor,bottom_wall,0);
+    chassis.reset_axis(rear_sensor,right_wall,0);
+    
+    chassis.right_swing_to_angle(155,{.turn_direction = cw});
+    intake_forward();
+    chassis.drive_distance(25,{.max_voltage = 3});
+    scraper.set(true);
+    chassis.turn_to_angle(139);
+    chassis.drive_distance(15,{.wait = false,.min_voltage = 3});
+    scraper.set(false);
+    changePiston.set(false);
+    chassis.wait();
+    intakeAssembly.outake_motor.spin(reverse, 100, percent);
+    vex::task::sleep(100);
+    intakeAssembly.outake_motor.stop(coast);
+    score();
+    vex::task::sleep(1000);
     /*chassis.turn_to_point(-46.345, -16.308);
     chassis.drive_to_point(46.345, -16.308,{.max_voltage = 10});
 
@@ -39,13 +82,13 @@ std::string red_left_winpoint(bool calibrate, mik::auto_variation var, bool get_
     intake_stop();
 
     chassis.reset_axis(left_sensor,bottom_wall,0);
-    chassis.reset_axis(rear_sensor,right_wall,0);*/
+    chassis.reset_axis(rear_sensor,right_wall,0);
     
     chassis.right_swing_to_angle(155,{.turn_direction = cw});
     intake_forward();
     chassis.drive_distance(25,{.max_voltage = 3});
     scraper.set(true);
     chassis.turn_to_angle(135);
-    chassis.drive_distance(10);
+    chassis.drive_distance(10);*/
     return "";
 }

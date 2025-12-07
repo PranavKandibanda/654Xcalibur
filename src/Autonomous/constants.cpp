@@ -7,7 +7,7 @@ void default_constants(void) {
     chassis.set_control_constants(5, 10, 1.019, 5, 10, 1.019);
 
     chassis.set_turn_constants(12,.304, .005, 4.026, 15);
-    chassis.set_drive_constants(10, 1.5, 0, 8.8, 0);
+    chassis.set_drive_constants(10, 1.35, 0, 9, 0);
     chassis.set_heading_constants(6, .4, 0, 1, 0);
     chassis.set_swing_constants(12, .437, .0295, 3.486, 15);
 

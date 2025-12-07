@@ -169,6 +169,7 @@ float Chassis::get_ForwardTracker_position() {
 }
 
 float Chassis::get_SidewaysTracker_position() {
+    return 0;
     return sideways_tracker.position(vex::deg) * sideways_tracker_inch_to_deg_ratio;
 }
 
