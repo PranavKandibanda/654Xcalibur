@@ -6,6 +6,7 @@
 #include "pros/rtos.hpp"
 #include "robodash/api.h"
 
+//sudo chmod 666 /dev/ttyACM0
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -135,7 +136,6 @@ void competition_initialize() {}
 
 // get a path used for pure pursuit
 // this needs to be put outside a function
-ASSET(example_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -143,12 +143,36 @@ ASSET(example_txt); // '.' replaced with "_" to make c++ happy
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-void sample_auton()
+void blue_5_3_auton_left()
 {
+    chassis.setPose(54.622,-15.478,0);
+    scraper_piston.set_value(false);
+    hook_piston.set_value(false);
+
+    chassis.turnToPoint(32.468,-18.643,20);
+    chassis.moveToPoint(32.468,-18.643,40);
+
+    chassis.moveToPose(6.63, -41.745,206.4,100,{});
+    // @TODO run intake code here
+    chassis.waitUntil(20);
+    scraper_piston.set_value(true);
+    chassis.waitUntilDone();
+    // @TODO stop intake code here
+
+    chassis.moveToPose(18.809, -38.131, 254.4,50,{},false);
+    chassis.moveToPose(36.662, -43.175, 206.4,30,{.lead=3},false);
+    chassis.moveToPose(30.226, -47.227, 270, 100,{.forwards=false},false);
+    //TODO RUN INTAKE FOR 3 SECONDS HERE
+    scraper_piston.set_value(true);
+
+    chassis.moveToPoint(56.157, -47.098, 200,{.minSpeed=67},false);
+    chassis.moveToPoint(30.226, -47.227, 100);
+    //TODO RUN INTAKE FOR 3 SECONDS HERE
+
 }
 
 rd::Selector selector({
-    {"sample auton", sample_auton}
+    {"Blue 5 + 3 Left", blue_5_3_auton_left}
 });
 
 void autonomous() {
