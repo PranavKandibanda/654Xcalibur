@@ -18,7 +18,7 @@ pros::MotorGroup leftMotors({-15, 14, -13},
 pros::MotorGroup rightMotors({17, -16, 18}, pros::MotorGearset::blue); // right motor group - ports 6, 7, 9 (reversed)
 
 pros::Motor intake_stage1 (4, pros::MotorGearset::blue); // intake stage 1 motor on port 1
-pros::Motor intake_stage2 (10, pros::MotorGearset::blue); // intake stage 2 motor on port 2
+pros::Motor intake_stage2 (-10, pros::MotorGearset::blue); // intake stage 2 motor on port 2
 
 // Inertial Sensor on port 10
 pros::Imu imu(8);
@@ -116,31 +116,67 @@ void outtake()
     intake_stage2.move(-127);
 }
 
+void load()
+{
+    intake_stage1.move(97);
+    intake_stage2.move(-127);
+}
+
+void stop_load()
+{
+    intake_stage1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    intake_stage2.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    intake_stage1.brake();
+    intake_stage2.brake();
+}
+
 void blue_5_3_auton_left()
 {
-    chassis.setPose(52.554,-15.874,0);
+    hook_piston.set_value(false);
+    scraper_piston.set_value(false);
+    middle.set_value(false);
+    chassis.setPose(49.554,-15.874,270);
     scraper_piston.set_value(false);
     hook_piston.set_value(false);
 
+    chassis.moveToPoint(44.554,-15.874, 400);
+
+    load();
     chassis.turnToPoint(32.468,-18.643,200);
     chassis.moveToPoint(32.468,-18.643,400);
 
-    chassis.moveToPose(6.63, -41.745,206.4,1000,{});
+    
+    chassis.moveToPose(5.63, -52.745,206.4,3000,{});
+    
     // @TODO run intake code here
-    chassis.waitUntil(20);
+    chassis.waitUntil(5);
     scraper_piston.set_value(true);
+    pros::delay(300);
+    chassis.waitUntil(8);
+    scraper_piston.set_value(false);
+    pros::delay(300);
+
+    chassis.waitUntil(50);
+    scraper_piston.set_value(true);
+    chassis.waitUntilDone();
+    pros::delay(300);
+    stop_load();
     chassis.waitUntilDone();
     // @TODO stop intake code here
 
-    chassis.moveToPose(18.809, -38.131, 254.4,500,{},false);
+    chassis.moveToPose(23.05, -23.582, 320.1, 500,{.forwards = false},false);
+    chassis.moveToPose(25.823, -18.089, 260,500,{.forwards = false},false);
+    intake();
+
+    /*chassis.moveToPose(18.809, -38.131, 254.4,500,{},false);
     chassis.moveToPose(36.662, -43.175, 206.4,300,{.lead=3},false);
     chassis.moveToPose(30.226, -47.227, 270, 1000,{.forwards=false},false);
     //TODO RUN INTAKE FOR 3 SECONDS HERE
     scraper_piston.set_value(true);
 
     chassis.moveToPoint(56.157, -47.098, 2000,{.minSpeed=67},false);
-    chassis.moveToPoint(30.226, -47.227, 1000);
-    //TODO RUN INTAKE FOR 3 SECONDS HERE
+    chassis.moveToPoint(30.226, -47.227, 1000);*/
+    //TODO RUN INTAKE FOR 3 SECONDS HERE*/
 }
 
 rd::Selector selector({
@@ -205,7 +241,7 @@ void opcontrol() {
     autonomous();
     // controller
     // loop to continuously update motors
-    /*while (true) {
+    while (true) {
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -215,7 +251,7 @@ void opcontrol() {
         pros::delay(10);
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
         {
-            middle.toggle();
+            scraper_piston.toggle();
             pros::delay(200);
         }
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
@@ -226,21 +262,19 @@ void opcontrol() {
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
             intake();
         }
-        else {
-            intake_stage1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-            intake_stage2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-            intake_stage1.brake();
-            intake_stage2.brake();
-        }
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
             outtake();
         }
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+        {
+            load();
+        }
         else {
-            intake_stage1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-            intake_stage2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+            intake_stage1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+            intake_stage2.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
             intake_stage1.brake();
             intake_stage2.brake();
         }
 
-    }*/
+    }
 }
