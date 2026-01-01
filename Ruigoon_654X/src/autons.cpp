@@ -90,47 +90,28 @@ void blue_5_3_auton_left() //unifinished, moving onto 3+3 push
     //TODO RUN INTAKE FOR 3 SECONDS HERE*/
 }
 
-ASSET(testSum_txt);
-ASSET(testSum2_txt);
+//ASSET(testSum_txt);
+ASSET(PushCenter3ToGoal_33_txt);
 
 void blue_3_3_auton_left()
 {
     hook_piston.set_value(false);
     scraper_piston.set_value(false);
     middle.set_value(false);
-    /*chassis.setPose(49.554,-15.874,270);
 
-    chassis.moveToPoint(44.554,-15.874, 50,{},false);
-
-    load();
-    chassis.turnToPoint(11.95,-25.037,400);
-    chassis.moveToPoint(11.95,-25.037,610,{.maxSpeed = 57});
-    
-    // @TODO run intake code here
-    chassis.waitUntil(19);
-    pros::Task::delay(400);
-    scraper_piston.set_value(true);
-    pros::delay(600);
-    chassis.cancelMotion();
-    //scraper_piston.set_value(false);
-
-    chassis.moveToPoint(23.05, -23.316, 500,{.forwards = false},false);
-
-    chassis.turnToHeading(140,500,{.direction=lemlib::AngularDirection::CCW_COUNTERCLOCKWISE},false);
-
-    chassis.moveToPoint(15.581, -11.152, 500,{.forwards = false},false);
-    intake();
-    middle.set_value(false);
-    pros::delay(2000);
-    stop_load();*/
     chassis.setPose(50.162,-16.804,270);
     chassis.moveToPoint(36.38,-16.804,500,{.maxSpeed=67},false);
     load();
-    chassis.follow(testSum2_txt,9.3,5500,true,false);
+    chassis.follow(PushCenter3ToGoal_33_txt,9.3,5500,true,false);
+    chassis.waitUntilDone();
     scraper_piston.set_value(true);
     pros::delay(300);
-    chassis.turnToPoint(11.566, -11.887,400,{.forwards=false},false);
-    chassis.moveToPoint(11.566, -11.887, 430,{.forwards = false},false);
+    chassis.setPose(24,-24,313);
+    //chassis.turnToPoint(13.579, -13.46,400,{.forwards=false},false);
+    //chassis.moveToPoint(13.46, -13.46, 330,{.forwards = false},false);
+    chassis.moveToPose(13.397, -13.25, 320.4,1000,{.forwards=false},false);
+    chassis.waitUntilDone();
+    pros::delay(300);
     middle.set_value(false);
     pros::delay(200);
     intake();
