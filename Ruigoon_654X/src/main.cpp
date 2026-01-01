@@ -1,5 +1,6 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
+#include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/adi.hpp"
 #include "pros/imu.h"
@@ -7,7 +8,7 @@
 #include "pros/motors.h"
 #include "pros/rtos.hpp"
 #include "robodash/api.h"
-
+#include "autons.h"
 //sudo chmod 666 /dev/ttyACM0
 // controller
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -24,9 +25,9 @@ pros::Motor intake_stage2 (-10, pros::MotorGearset::blue); // intake stage 2 mot
 pros::Imu imu(8);
 
 //pneumatics
-pros::adi::Pneumatics hook_piston('A',false); //hook piston on port A
+pros::adi::Pneumatics hook_piston('C',false); //hook piston on port A
 pros::adi::Pneumatics scraper_piston('B',false); //hook piston on port A
-pros::adi::Pneumatics middle('C',false); //middle piston on port C
+pros::adi::Pneumatics middle('A',false); //middle piston on port C
 //pneumatics
 
 
@@ -118,7 +119,8 @@ void outtake()
 
 void load()
 {
-    intake_stage1.move(97);
+    middle.set_value(true);
+    intake_stage1.move(127);
     intake_stage2.move(-127);
 }
 
@@ -130,63 +132,19 @@ void stop_load()
     intake_stage2.brake();
 }
 
-void blue_5_3_auton_left()
-{
-    hook_piston.set_value(false);
-    scraper_piston.set_value(false);
-    middle.set_value(false);
-    chassis.setPose(49.554,-15.874,270);
-    scraper_piston.set_value(false);
-    hook_piston.set_value(false);
 
-    chassis.moveToPoint(44.554,-15.874, 400);
-
-    load();
-    chassis.turnToPoint(32.468,-18.643,200);
-    chassis.moveToPoint(32.468,-18.643,400);
-
-    
-    chassis.moveToPose(5.63, -52.745,206.4,3000,{});
-    
-    // @TODO run intake code here
-    chassis.waitUntil(5);
-    scraper_piston.set_value(true);
-    pros::delay(300);
-    chassis.waitUntil(8);
-    scraper_piston.set_value(false);
-    pros::delay(300);
-
-    chassis.waitUntil(50);
-    scraper_piston.set_value(true);
-    chassis.waitUntilDone();
-    pros::delay(300);
-    stop_load();
-    chassis.waitUntilDone();
-    // @TODO stop intake code here
-
-    chassis.moveToPose(23.05, -23.582, 320.1, 500,{.forwards = false},false);
-    chassis.moveToPose(25.823, -18.089, 260,500,{.forwards = false},false);
-    intake();
-
-    /*chassis.moveToPose(18.809, -38.131, 254.4,500,{},false);
-    chassis.moveToPose(36.662, -43.175, 206.4,300,{.lead=3},false);
-    chassis.moveToPose(30.226, -47.227, 270, 1000,{.forwards=false},false);
-    //TODO RUN INTAKE FOR 3 SECONDS HERE
-    scraper_piston.set_value(true);
-
-    chassis.moveToPoint(56.157, -47.098, 2000,{.minSpeed=67},false);
-    chassis.moveToPoint(30.226, -47.227, 1000);*/
-    //TODO RUN INTAKE FOR 3 SECONDS HERE*/
-}
 
 rd::Selector selector({
-    {"Blue 5 + 3 Left", blue_5_3_auton_left}
+    {"Blue 3 + 3 Left", blue_3_3_auton_left},
+    {"Skills", skills},
+    {"PID Test Linear", pid_test_linear},
+    {"PID Test Angular", pid_test_angular}
 });
 
 void initialize() {
-    //pros::lcd::initialize(); // initialize brain screen
+    pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
-    selector.focus();
+    //selector.focus();
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
     // lemlib::bufferedStdout().setRate(...);
@@ -196,7 +154,7 @@ void initialize() {
     // works, refer to the fmtlib docs
 
     // thread to for brain screen and position logging
-    /*pros::Task screenTask([&]() {
+    pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
@@ -207,7 +165,7 @@ void initialize() {
             // delay to save resources
             pros::delay(50);
         }
-    });*/
+    });
 }
 
 /**
@@ -231,7 +189,8 @@ void competition_initialize() {}
 
 void autonomous() {
 	//selector.run_auton();
-    blue_5_3_auton_left();
+    blue_3_3_auton_left();
+    //skills();
 }
 
 /**
@@ -249,12 +208,12 @@ void opcontrol() {
         chassis.arcade(leftY, rightX);
         // delay to save resources
         pros::delay(10);
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
         {
             scraper_piston.toggle();
             pros::delay(200);
         }
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B))
         {
             hook_piston.toggle();
             pros::delay(200);
@@ -265,15 +224,25 @@ void opcontrol() {
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
             outtake();
         }
-        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
         {
             load();
+        }
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+        {
+            middle.set_value(false);
+            intake();
         }
         else {
             intake_stage1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
             intake_stage2.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
             intake_stage1.brake();
             intake_stage2.brake();
+        }
+        if (controller.get_digital_new_release(pros:: E_CONTROLLER_DIGITAL_R2))
+        {
+            middle.set_value(true);
+            pros::delay(200);
         }
 
     }
