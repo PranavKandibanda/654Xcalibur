@@ -92,6 +92,7 @@ void blue_5_3_auton_left() //unifinished, moving onto 3+3 push
 
 //ASSET(testSum_txt);
 ASSET(PushCenter3ToGoal_33_txt);
+ASSET(PushCenter3ToGoal_end_33_txt);
 
 void blue_3_3_auton_left()
 {
@@ -102,22 +103,26 @@ void blue_3_3_auton_left()
     chassis.setPose(50.162,-16.804,270);
     chassis.moveToPoint(36.38,-16.804,500,{.maxSpeed=67},false);
     load();
-    chassis.follow(PushCenter3ToGoal_33_txt,9.3,5500,true,false);
+    chassis.follow(PushCenter3ToGoal_33_txt,8.7,5500,true,false);
     chassis.waitUntilDone();
+
     scraper_piston.set_value(true);
     pros::delay(300);
     chassis.setPose(24,-24,313);
+
+    
+    //chassis.follow(PushCenter3ToGoal_end_33_txt, 8.3, 5500);
     //chassis.turnToPoint(13.579, -13.46,400,{.forwards=false},false);
-    //chassis.moveToPoint(13.46, -13.46, 330,{.forwards = false},false);
-    chassis.moveToPose(13.397, -13.25, 320.4,1000,{.forwards=false},false);
+    //chassis.moveToPoint(13.46, -13.46, 350,{.forwards = false},false);
+
+    /*chassis.moveToPose(15.097, -15.25, 323.4,600,{.forwards=false},false);
     chassis.waitUntilDone();
     pros::delay(300);
     middle.set_value(false);
     pros::delay(200);
     intake();
     pros::Task::delay(2000);
-    stop_load();
-
+    stop_load();*/
 }
 
 void pid_test_linear()
