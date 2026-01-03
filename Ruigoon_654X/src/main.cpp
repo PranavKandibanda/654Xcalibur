@@ -34,13 +34,13 @@ pros::adi::Pneumatics middle('A',false); //middle piston on port C
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
-pros::Rotation horizontalEnc(12);
+pros::Rotation horizontalEnc(-12);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 pros::Rotation verticalEnc(-19);
 // horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -3.25);
+lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -1.318);
 // vertical tracking wheel. 2.75" diameter, 2.5" offset, left of the robot (negative)
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, -1);
+lemlib::TrackingWheel vertical(&verticalEnc, 2, .005422);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
@@ -104,6 +104,60 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
+void measure_offsets() {
+    auto degDiff180 = [](double endDeg, double startDeg) {
+        return std::remainder(endDeg - startDeg, 360.0); // [-180, 180]
+    };
+
+    auto toRad = [](double deg) {
+        return deg * (M_PI / 180.0);
+    };
+
+    // Number of times to test
+    int iterations = 10;
+
+    // Our final offsets
+    double v_offset = 0.0, h_offset = 0.0;
+
+    horizontal.reset();
+    vertical.reset();
+
+    for (int i = 0; i < iterations; i++) {
+        // Reset pid targets and get ready for running an auton
+        // chassis.drive_brake_set(MOTOR_BRAKE_HOLD);
+        // chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+
+        chassis.setPose(0, 0, 0);
+
+        double imu_start = imu.get_rotation();
+        double target = i % 2 == 0 ? 90 : 270;  // Switch the turn target every run from 270 to 90
+
+        // Turn to target at half power
+        chassis.turnToHeading(target, 3000, {.maxSpeed = 63}, false);
+        pros::delay(250);
+
+        // Calculate delta in angle
+        double t_delta = toRad(degDiff180(imu.get_rotation(), imu_start)); // signed radians
+
+        // Calculate delta in sensor values that exist
+
+        double v_delta = vertical.getDistanceTraveled();
+        double h_delta = horizontal.getDistanceTraveled();
+
+        // Calculate the radius that the robot traveled
+        v_offset += v_delta / t_delta;
+        h_offset += h_delta / t_delta;
+    }
+
+    // Average all offsets
+    v_offset /= iterations;
+    h_offset /= iterations;
+
+    pros::lcd::print(3, "vertical offset: %f", v_offset); // x
+    pros::lcd::print(4, "horiz offset: %f", h_offset); // y
+
+}
 
 void intake()
 {
@@ -189,8 +243,12 @@ void competition_initialize() {}
 
 void autonomous() {
 	//selector.run_auton();
+    //pid_test_linear();
+    //pid_test_angular();
     blue_3_3_auton_left();
     //skills();
+    //measure_offsets();
+    //accuracy_tuning();
 }
 
 /**

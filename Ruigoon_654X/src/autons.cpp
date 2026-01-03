@@ -1,14 +1,14 @@
-#include "main.h"
+#include "lemlib/asset.hpp"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/adi.hpp"
-#include "pros/imu.h"
-#include "pros/misc.h"
-#include "pros/motors.h"
 #include "pros/rtos.hpp"
-#include "robodash/api.h"
+#include <future>
 #include "autons.h"
+//ASSET(testSum_txt);
+ASSET(PushCenter3ToGoal_33_txt);
+ASSET(PushCenter3ToGoal_end_33_txt);
 
 void skills()
 {
@@ -90,53 +90,50 @@ void blue_5_3_auton_left() //unifinished, moving onto 3+3 push
     //TODO RUN INTAKE FOR 3 SECONDS HERE*/
 }
 
-//ASSET(testSum_txt);
-ASSET(PushCenter3ToGoal_33_txt);
-ASSET(PushCenter3ToGoal_end_33_txt);
+
+void accuracy_tuning()
+{
+    chassis.setPose(0,0,0);
+}
 
 void blue_3_3_auton_left()
 {
     hook_piston.set_value(false);
     scraper_piston.set_value(false);
     middle.set_value(false);
-
-    chassis.setPose(50.162,-16.804,270);
-    chassis.moveToPoint(36.38,-16.804,500,{.maxSpeed=67},false);
+    chassis.setPose(47,-14.75,270);
+    chassis.moveToPoint(33.547, -14.75, 9999,{},false);
     load();
-    chassis.follow(PushCenter3ToGoal_33_txt,8.7,5500,true,false);
-    chassis.waitUntilDone();
-
-    scraper_piston.set_value(true);
-    pros::delay(300);
-    chassis.setPose(24,-24,313);
-
+    chassis.turnToHeading(230, 300,{},false);
+    chassis.moveToPoint(19,-24, 1100,{.maxSpeed=37},false);//reduce timeout, increase maxspeed slowly with testing
     
-    //chassis.follow(PushCenter3ToGoal_end_33_txt, 8.3, 5500);
-    //chassis.turnToPoint(13.579, -13.46,400,{.forwards=false},false);
-    //chassis.moveToPoint(13.46, -13.46, 350,{.forwards = false},false);
-
-    /*chassis.moveToPose(15.097, -15.25, 323.4,600,{.forwards=false},false);
-    chassis.waitUntilDone();
-    pros::delay(300);
+    chassis.turnToPoint(4.5, -9.9, 500,{.forwards=false},false);
+    stop_load();
+    pros::Task::delay(500);
     middle.set_value(false);
-    pros::delay(200);
+    chassis.moveToPoint(4.5, -9.9, 1000,{.forwards=false},false);
+    pros::delay(750);
     intake();
-    pros::Task::delay(2000);
-    stop_load();*/
+    pros::delay(2000);
+    stop_load(); 
 }
 
 void pid_test_linear()
 {
     chassis.setPose(0,0,0);
+    chassis.moveToPoint(0, 3, 99999);
+    chassis.moveToPoint(0, 12, 99999);
     chassis.moveToPoint(0, 24, 99999);
+    chassis.moveToPoint(0, -24, 99999);
 }
 
 void pid_test_angular()
 {
     chassis.setPose(0,0,0);
-    chassis.turnToHeading(0,45,{},500);
-    chassis.turnToHeading(0,90,{},500);
-    chassis.turnToHeading(0,180,{},500);
-    chassis.turnToHeading(0,0,{},500);
-
+    chassis.turnToHeading(45,999,{},false);
+    chassis.turnToHeading(90,999,{},false);
+    chassis.turnToHeading(135,999,{},false);
+    chassis.turnToHeading(180,999,{},false);
+    chassis.turnToHeading(360,999,{},false);
+    chassis.turnToHeading(225,999,{},false);
 }
