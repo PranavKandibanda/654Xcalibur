@@ -24,11 +24,14 @@ void intake();
 void outtake();
 void load();
 void stop_load();
+void low_score();
+void middle_score();
 
 // Autonomous routine declarations
 void skills();
 void blue_5_3_auton_left();
 void blue_3_3_auton_left();
+void sawp ();
 void pid_test_linear();
 void pid_test_angular();
 void accuracy_tuning();

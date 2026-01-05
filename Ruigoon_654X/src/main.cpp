@@ -165,6 +165,18 @@ void intake()
     intake_stage2.move(127);
 }
 
+void low_score()
+{
+    intake_stage1.move(-87);
+    intake_stage2.move(-87);
+}
+
+void middle_score()
+{
+    intake_stage1.move(87);
+    intake_stage2.move(87);
+}
+
 void outtake()
 {
     intake_stage1.move(-127);
@@ -245,7 +257,8 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    blue_3_3_auton_left();
+    //blue_3_3_auton_left();
+    sawp();
     //skills();
     //measure_offsets();
     //accuracy_tuning();
