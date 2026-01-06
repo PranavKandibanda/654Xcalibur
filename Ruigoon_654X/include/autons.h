@@ -26,6 +26,8 @@ void load();
 void stop_load();
 void low_score();
 void middle_score();
+void unjam_intake();
+void unjamTask();
 
 // Autonomous routine declarations
 void skills();

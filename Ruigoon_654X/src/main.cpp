@@ -167,8 +167,8 @@ void intake()
 
 void low_score()
 {
-    intake_stage1.move(-87);
-    intake_stage2.move(-87);
+    intake_stage1.move(-127);
+    intake_stage2.move(-127);
 }
 
 void middle_score()
@@ -197,8 +197,6 @@ void stop_load()
     intake_stage1.brake();
     intake_stage2.brake();
 }
-
-
 
 rd::Selector selector({
     {"Blue 3 + 3 Left", blue_3_3_auton_left},
@@ -257,11 +255,9 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    //blue_3_3_auton_left();
-    sawp();
+    blue_3_3_auton_left();
+    //sawp();
     //skills();
-    //measure_offsets();
-    //accuracy_tuning();
 }
 
 /**

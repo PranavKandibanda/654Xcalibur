@@ -76,18 +76,6 @@ void blue_5_3_auton_left() //unifinished, moving onto 3+3 push
     chassis.moveToPose(23.05, -23.582, 320.1, 200,{.forwards = false},false);
     chassis.turnToPoint(10.823, -11.089, 500,{.forwards = false});
     chassis.moveToPoint(10.823, -11.089 ,500,{.forwards = false});
-    /*chassis.moveToPose(18.823, -18.089, 240,600,{.forwards = false},false);
-    intake();
-    pros::delay(500);*/
-    /*chassis.moveToPose(18.809, -38.131, 254.4,500,{},false);
-    chassis.moveToPose(36.662, -43.175, 206.4,300,{.lead=3},false);
-    chassis.moveToPose(30.226, -47.227, 270, 1000,{.forwards=false},false);
-    //TODO RUN INTAKE FOR 3 SECONDS HERE
-    scraper_piston.set_value(true);
-
-    chassis.moveToPoint(56.157, -47.098, 2000,{.minSpeed=67},false);
-    chassis.moveToPoint(30.226, -47.227, 1000);*/
-    //TODO RUN INTAKE FOR 3 SECONDS HERE*/
 }
 
 
@@ -120,16 +108,16 @@ void blue_3_3_auton_left()
 
     chassis.moveToPoint(38.53, -46.87, 1000,{},false);
 
-    chassis.turnToPoint(56.04, -55.2,300,{},false);
+    chassis.turnToPoint(56.04, -54.2,300,{},false);
     scraper_piston.set_value(true);
 
     load();
-    chassis.moveToPoint(56.04, -54.4, 1800,{.maxSpeed=37},false);
+    chassis.moveToPoint(56.04, -54.2, 1800,{.maxSpeed=37},false);
     pros::Task::delay(1500);
     stop_load();
 
-    chassis.turnToPoint(6.3, -54.4, 300,{.forwards=false},false);
-    chassis.moveToPoint(6.3, -54.4, 900,{.forwards=false,.maxSpeed=87},false);
+    chassis.turnToPoint(6.3, -54.2, 300,{.forwards=false},false);
+    chassis.moveToPoint(6.3, -54.2, 900,{.forwards=false,.maxSpeed=87},false);
     middle_score();
     pros::delay(850);
     stop_load();
@@ -142,40 +130,55 @@ void sawp ()
     //initialize
     hook_piston.set_value(false);
     scraper_piston.set_value(false);
-    middle.set_value(false);
+    middle.set_value(true);
     chassis.setPose(47,14.75,270);
     //initialize
 
-    //center lower goal push
+    //center lower goal push start
     chassis.moveToPoint(33.547, 14.75, 9999,{},false);
     load();
     chassis.turnToHeading(310, 300,{},false);
-    chassis.moveToPoint(19,24, 1100,{.maxSpeed=37},false);//reduce timeout, increase maxspeed slowly with testing
-    
+    chassis.moveToPoint(19,24, 1100,{.maxSpeed=37},true);
+    chassis.waitUntil(12);
+    scraper_piston.set_value(true);
+    chassis.waitUntilDone();
+    scraper_piston.set_value(false);
+
     chassis.turnToPoint(4.5, 9.9, 500,{},false);
-    stop_load();
     pros::Task::delay(500);
-    chassis.moveToPoint(8.7, 15.5, 1000,{},false);
+
+    //pros::Task::delay(1500);
+
+    chassis.moveToPoint(8.5, 16.3, 1000,{},true);
+    chassis.waitUntil(7);
+    stop_load();
+    chassis.waitUntilDone();
     pros::delay(350);
     low_score();
     pros::delay(800);
     stop_load();
     //end center lower goal push
 
+    load();
     chassis.moveToPoint(23.8, 27.8, 1000,{.forwards=false},false);
     //chassis.setPose(24,24,chassis.getPose().theta);
 
 
     //upper goal push start
-    load();
-    chassis.moveToPoint(23.8,-10, 1100,{},false);
-    chassis.moveToPoint(19,-20, 1100,{.maxSpeed=7},false);//reduce timeout, increase maxspeed slowly with testing
     
+    chassis.moveToPoint(23.8,-10, 1100,{},true);
+    chassis.waitUntil(35);
+    scraper_piston.set_value(true);
+    chassis.waitUntilDone();
+    scraper_piston.set_value(false);
+    
+    //y value was -24
+    chassis.moveToPoint(19,-28, 1100,{.maxSpeed=7},false);//reduce timeout, increase maxspeed slowly with testing
     chassis.turnToPoint(4.5, -9.9, 500,{.forwards=false},false);
     stop_load();
     pros::Task::delay(500);
     middle.set_value(false);
-    chassis.moveToPoint(4.5, -9.9, 1000,{.forwards=false},false);
+    chassis.moveToPoint(5, -9.9, 1000,{.forwards=false},false);
     pros::delay(350);
     middle_score();
     pros::delay(1000);
@@ -187,20 +190,20 @@ void sawp ()
 
     chassis.moveToPoint(38.53, -46.87, 1000,{},false);
 
-    chassis.turnToPoint(56.04, -55.2,300,{},false);
+    chassis.turnToPoint(56.04, -55.5,800,{},false);
     scraper_piston.set_value(true);
 
     load();
-    chassis.moveToPoint(56.04, -54.4, 1800,{.maxSpeed=37},false);
+    chassis.moveToPoint(56.04, -55.5, 1800,{.maxSpeed=37},false);
     pros::Task::delay(1500);
     stop_load();
 
-    chassis.turnToPoint(6.3, -54.4, 300,{.forwards=false},false);
-    chassis.moveToPoint(6.3, -54.4, 900,{.forwards=false,.maxSpeed=87},false);
-    middle_score();
+    chassis.turnToPoint(24, -54.4, 300,{.forwards=false},false);
+    chassis.moveToPoint(24, -54.4, 900,{.forwards=false,.maxSpeed=87},false);
+    intake();
     pros::delay(850);
     stop_load();
-    //loader and long goal push start
+    //loader and long goal push end
 
 }
 void pid_test_linear()
