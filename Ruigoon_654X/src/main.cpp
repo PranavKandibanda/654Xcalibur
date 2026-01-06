@@ -173,8 +173,8 @@ void low_score()
 
 void middle_score()
 {
-    intake_stage1.move(87);
-    intake_stage2.move(87);
+    intake_stage1.move(97);
+    intake_stage2.move(97);
 }
 
 void outtake()
@@ -199,7 +199,9 @@ void stop_load()
 }
 
 rd::Selector selector({
-    {"Blue 3 + 3 Left", blue_3_3_auton_left},
+    {"Blue 3 + 3 Left", left_3_3_auton},
+    {"Blue 5 + 3 Left", blue_5_3_auton_left},
+    {"Sawp", sawp},
     {"Skills", skills},
     {"PID Test Linear", pid_test_linear},
     {"PID Test Angular", pid_test_angular}
@@ -255,7 +257,7 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    blue_3_3_auton_left();
+    left_3_3_auton();
     //sawp();
     //skills();
 }

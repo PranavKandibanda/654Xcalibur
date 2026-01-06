@@ -84,16 +84,21 @@ void accuracy_tuning()
     chassis.setPose(0,0,0);
 }
 
-void blue_3_3_auton_left()
+void left_3_3_auton()
 {
+    //initialize
     hook_piston.set_value(false);
     scraper_piston.set_value(false);
     middle.set_value(false);
     chassis.setPose(47,-14.75,270);
+    //initialize
+
+    //center upper goal push start
     chassis.moveToPoint(33.547, -14.75, 9999,{},false);
     load();
     chassis.turnToHeading(230, 300,{},false);
     chassis.moveToPoint(19,-24, 1100,{.maxSpeed=37},false);//reduce timeout, increase maxspeed slowly with testing
+    scraper_piston.set_value(true);
     
     chassis.turnToPoint(4.5, -9.9, 500,{.forwards=false},false);
     stop_load();
@@ -102,26 +107,43 @@ void blue_3_3_auton_left()
     chassis.moveToPoint(4.5, -9.9, 1000,{.forwards=false},false);
     pros::delay(350);
     intake();
-    pros::delay(2000);
+    pros::delay(1000);
     stop_load(); 
     chassis.setPose(13.5,-13.5,chassis.getPose().theta);
+    //end center upper goal push
 
-    chassis.moveToPoint(38.53, -46.87, 1000,{},false);
+    //long goal push start
+    chassis.moveToPoint(38.53, -46.87, 1000,{.maxSpeed=87},false);
 
-    chassis.turnToPoint(56.04, -54.2,300,{},false);
-    scraper_piston.set_value(true);
+    chassis.turnToPoint(55.04, -52.8,300,{},false);
 
     load();
-    chassis.moveToPoint(56.04, -54.2, 1800,{.maxSpeed=37},false);
+    chassis.moveToPoint(55.04, -52.8, 1800,{.maxSpeed=37},false);
+    pros::Task::delay(1500);
+
+    chassis.turnToPoint(27, -52.8+2, 300,{.forwards=false},false);
+    chassis.moveToPoint(27, -52.8+2, 900,{.forwards=false,.maxSpeed=87},true);
+    chassis.waitUntil(10);
+    stop_load();
+    chassis.waitUntilDone();
+    intake();
     pros::Task::delay(1500);
     stop_load();
-
-    chassis.turnToPoint(6.3, -54.2, 300,{.forwards=false},false);
-    chassis.moveToPoint(6.3, -54.2, 900,{.forwards=false,.maxSpeed=87},false);
-    middle_score();
-    pros::delay(850);
-    stop_load();
+    scraper_piston.set_value(false);
+    //end long goal push
     
+    //start hook push
+    chassis.moveToPoint(chassis.getPose().x+5, chassis.getPose().y, 300,{},false);
+
+    chassis.turnToPoint(chassis.getPose().x-5,chassis.getPose().y-10.8, 2500,{.forwards=false},false);
+    hook_piston.set_value(true);
+    pros::delay(100);
+    hook_piston.set_value(false);
+    chassis.moveToPoint(chassis.getPose().x-5,chassis.getPose().y-10.8, 1000,{.forwards=false,.maxSpeed=87},false);
+
+    chassis.turnToHeading(270+180, 500,{},false);
+    chassis.moveToPoint(chassis.getPose().x-20, chassis.getPose().y+5, 1000,{.forwards=false,.maxSpeed=87},false);
+    //end hook push
 
 }
 
