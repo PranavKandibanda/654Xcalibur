@@ -195,7 +195,7 @@ void sawp ()
     scraper_piston.set_value(false);
     
     //y value was -24
-    chassis.moveToPoint(19,-28, 1100,{.maxSpeed=7},false);//reduce timeout, increase maxspeed slowly with testing
+    chassis.moveToPoint(23.8,-28, 1100,{.maxSpeed=7},false);//reduce timeout, increase maxspeed slowly with testing
     chassis.turnToPoint(4.5, -9.9, 500,{.forwards=false},false);
     stop_load();
     pros::Task::delay(500);
@@ -212,16 +212,16 @@ void sawp ()
 
     chassis.moveToPoint(38.53, -46.87, 1000,{},false);
 
-    chassis.turnToPoint(56.04, -55.5,800,{},false);
+    chassis.turnToPoint(56.04, -53.5,800,{},false);
     scraper_piston.set_value(true);
 
     load();
-    chassis.moveToPoint(56.04, -55.5, 1800,{.maxSpeed=37},false);
+    chassis.moveToPoint(56.04, -53.5, 1800,{.maxSpeed=37},false);
     pros::Task::delay(1500);
     stop_load();
 
-    chassis.turnToPoint(24, -54.4, 300,{.forwards=false},false);
-    chassis.moveToPoint(24, -54.4, 900,{.forwards=false,.maxSpeed=87},false);
+    chassis.turnToPoint(24, -53.4, 300,{.forwards=false},false);
+    chassis.moveToPoint(24, -53.4, 900,{.forwards=false,.maxSpeed=87},false);
     intake();
     pros::delay(850);
     stop_load();

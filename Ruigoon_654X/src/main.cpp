@@ -257,8 +257,8 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    left_3_3_auton();
-    //sawp();
+    //left_3_3_auton();
+    sawp();
     //skills();
 }
 
