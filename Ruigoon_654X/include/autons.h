@@ -31,8 +31,9 @@ void unjamTask();
 
 // Autonomous routine declarations
 void skills();
-void blue_5_3_auton_left();
+void left_5_3_auton();
 void left_3_3_auton();
+void right_3_3_auton();
 void sawp ();
 void pid_test_linear();
 void pid_test_angular();

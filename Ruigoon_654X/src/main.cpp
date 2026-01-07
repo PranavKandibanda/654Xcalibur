@@ -200,7 +200,7 @@ void stop_load()
 
 rd::Selector selector({
     {"Blue 3 + 3 Left", left_3_3_auton},
-    {"Blue 5 + 3 Left", blue_5_3_auton_left},
+    {"Blue 5 + 3 Left", left_5_3_auton},
     {"Sawp", sawp},
     {"Skills", skills},
     {"PID Test Linear", pid_test_linear},
@@ -258,7 +258,9 @@ void autonomous() {
     //pid_test_linear();
     //pid_test_angular();
     //left_3_3_auton();
-    sawp();
+    right_3_3_auton();
+    //left_5_3_auton();
+    //sawp();
     //skills();
 }
 
