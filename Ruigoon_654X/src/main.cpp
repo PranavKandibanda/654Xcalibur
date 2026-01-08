@@ -53,7 +53,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 
 // lateral motion controller
 lemlib::ControllerSettings linearController(7.35, // proportional gain (kP)
-                                            .2, // integral gain (kI)
+                                            .1, // integral gain (kI), was .2
                                             20, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
@@ -257,8 +257,8 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    //left_3_3_auton();
-    right_3_3_auton();
+    left_3_3_auton();
+    //right_3_3_auton();
     //left_5_3_auton();
     //sawp();
     //skills();
