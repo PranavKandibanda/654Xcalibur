@@ -36,9 +36,9 @@ pros::adi::Pneumatics middle('A',false); //middle piston on port C
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
 pros::Rotation horizontalEnc(-12);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
-pros::Rotation verticalEnc(-19);
+pros::Rotation verticalEnc(-20);
 // horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
-lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -1.318);
+lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -2.318);
 // vertical tracking wheel. 2.75" diameter, 2.5" offset, left of the robot (negative)
 lemlib::TrackingWheel vertical(&verticalEnc, 2, .005422);
 
@@ -52,15 +52,15 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(7.35, // proportional gain (kP)
-                                            .1, // integral gain (kI), was .2
-                                            20, // derivative gain (kD)
+lemlib::ControllerSettings linearController(6.02, // proportional gain (kP)
+                                            0, // integral gain (kI), was .2
+                                            25, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
-                                            3, // large error range, in inches
+                                            5, // large error range, in inches
                                     500, // large error range timeout, in milliseconds
-                                            7 // maximum acceleration (slew)
+                                            20 // maximum acceleration (slew)
 );
 
 // angular motion controller
@@ -167,8 +167,8 @@ void intake()
 
 void low_score()
 {
-    intake_stage1.move(-127);
-    intake_stage2.move(-127);
+    intake_stage1.move(-97);
+    intake_stage2.move(-97);
 }
 
 void middle_score()
@@ -257,8 +257,8 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    left_3_3_auton();
-    //right_3_3_auton();
+    //left_3_3_auton();
+    right_3_3_auton();
     //left_5_3_auton();
     //sawp();
     //skills();
