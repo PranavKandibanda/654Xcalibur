@@ -167,8 +167,8 @@ void intake()
 
 void low_score()
 {
-    intake_stage1.move(-97);
-    intake_stage2.move(-97);
+    intake_stage1.move(-87);
+    intake_stage2.move(-87);
 }
 
 void middle_score()
@@ -257,8 +257,8 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    //left_3_3_auton();
-    right_3_3_auton();
+    left_3_3_auton();
+    //right_3_3_auton();
     //left_5_3_auton();
     //sawp();
     //skills();
