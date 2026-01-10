@@ -217,7 +217,7 @@ void initialize() {
     // works, refer to the fmtlib docs
 
     // thread to for brain screen and position logging
-    pros::Task screenTask([&]() {
+    /*pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
@@ -228,7 +228,7 @@ void initialize() {
             // delay to save resources
             pros::delay(50);
         }
-    });
+    });*/
 }
 
 /**
@@ -255,9 +255,9 @@ void autonomous() {
     //pid_test_linear();
     //pid_test_angular();
     //left_3_3_auton();
-    //right_3_3_auton();
+    right_3_3_auton();
     //left_5_3_auton();
-    sawp();
+    //sawp();
     //skills();
 }
 
@@ -265,9 +265,9 @@ void autonomous() {
  * Runs in driver control
  */
 void opcontrol() {
-    autonomous();
     // controller
     // loop to continuously update motors
+    autonomous();
     while (true) {
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
