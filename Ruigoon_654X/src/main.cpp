@@ -36,7 +36,7 @@ pros::adi::Pneumatics middle('A',false); //middle piston on port C
 // horizontal tracking wheel encoder. Rotation sensor, port 20, not reversed
 pros::Rotation horizontalEnc(-12);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
-pros::Rotation verticalEnc(-20);
+pros::Rotation verticalEnc(-19);
 // horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
 lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -2.318);
 // vertical tracking wheel. 2.75" diameter, 2.5" offset, left of the robot (negative)
@@ -167,8 +167,8 @@ void intake()
 
 void low_score()
 {
-    intake_stage1.move(-87);
-    intake_stage2.move(-87);
+    intake_stage1.move(-97);
+    intake_stage2.move(-97);
 }
 
 void middle_score()
@@ -199,12 +199,9 @@ void stop_load()
 }
 
 rd::Selector selector({
-    {"Blue 3 + 3 Left", left_3_3_auton},
-    {"Blue 5 + 3 Left", left_5_3_auton},
+    {"4 + 3 Left", left_3_3_auton},
     {"Sawp", sawp},
-    {"Skills", skills},
-    {"PID Test Linear", pid_test_linear},
-    {"PID Test Angular", pid_test_angular}
+    {"4 + 3 Right", right_3_3_auton}
 });
 
 void initialize() {
@@ -257,10 +254,10 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    left_3_3_auton();
+    //left_3_3_auton();
     //right_3_3_auton();
     //left_5_3_auton();
-    //sawp();
+    sawp();
     //skills();
 }
 
