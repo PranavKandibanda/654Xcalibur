@@ -30,6 +30,11 @@ pros::adi::Pneumatics scraper_piston('B',false); //hook piston on port A
 pros::adi::Pneumatics middle('A',false); //middle piston on port C
 //pneumatics
 
+//distance sensors
+pros::Distance dNorth (1); //distance sensor on port 1
+pros::Distance dEast (9); //distance sensor on port 2
+pros::Distance dSouth (6); //distance sensor on port 3'
+pros::Distance dWest (5); //distance sensor on port 4
 
 
 // tracking wheels
@@ -52,15 +57,15 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(6.02, // proportional gain (kP)
+lemlib::ControllerSettings linearController(13.52, // proportional gain (kP)
                                             0, // integral gain (kI), was .2
-                                            25, // derivative gain (kD)
+                                            79.5, // derivative gain (kD)
                                             3, // anti windup
-                                            1, // small error range, in inches
-                                            100, // small error range timeout, in milliseconds
+                                            2, // small error range, in inches
+                                            1000, // small error range timeout, in milliseconds
                                             5, // large error range, in inches
-                                    500, // large error range timeout, in milliseconds
-                                            20 // maximum acceleration (slew)
+                                    750, // large error range timeout, in milliseconds
+                                            87 // maximum acceleration (slew)
 );
 
 // angular motion controller
@@ -69,7 +74,7 @@ lemlib::ControllerSettings angularController(1.5, // proportional gain (kP)
                                              10, // derivative gain (kD)
                                              3, // anti windup
                                              1, // small error range, in degrees
-                                             100, // small error range timeout, in milliseconds
+                                             1000, // small error range timeout, in milliseconds
                                              3, // large error range, in degrees
                                              500, // large error range timeout, in milliseconds
                                              0   // maximum acceleration (slew)
@@ -173,8 +178,8 @@ void low_score()
 
 void middle_score()
 {
-    intake_stage1.move(97);
-    intake_stage2.move(97);
+    intake_stage1.move(102);
+    intake_stage2.move(102);
 }
 
 void outtake()
@@ -254,9 +259,8 @@ void autonomous() {
 	//selector.run_auton();
     //pid_test_linear();
     //pid_test_angular();
-    //left_3_3_auton();
-    right_3_3_auton();
-    //left_5_3_auton();
+    left_3_3_auton();
+    //right_3_3_auton();
     //sawp();
     //skills();
 }
@@ -267,7 +271,7 @@ void autonomous() {
 void opcontrol() {
     // controller
     // loop to continuously update motors
-    autonomous();
+    //autonomous();
     while (true) {
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -283,8 +287,7 @@ void opcontrol() {
         }
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B))
         {
-            hook_piston.toggle();
-            pros::delay(200);
+            hook_piston.set_value(false);
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
             intake();
@@ -299,7 +302,7 @@ void opcontrol() {
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
         {
             middle.set_value(false);
-            intake();
+            middle_score();
         }
         else {
             intake_stage1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
@@ -310,6 +313,11 @@ void opcontrol() {
         if (controller.get_digital_new_release(pros:: E_CONTROLLER_DIGITAL_R2))
         {
             middle.set_value(true);
+            pros::delay(200);
+        }
+        else if(controller.get_digital_new_release(pros::E_CONTROLLER_DIGITAL_B))
+        {
+            hook_piston.set_value(true);
             pros::delay(200);
         }
 
