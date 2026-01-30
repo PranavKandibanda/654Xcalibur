@@ -7,8 +7,8 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // motor groups
-pros::MotorGroup leftMotors({-3, -10, -1},pros::MotorGearset::blue); // left motor group - ports 3 (reversed), 4, 5 (reversed)
-pros::MotorGroup rightMotors({4, 9, 2}, pros::MotorGearset::blue); // right motor group - ports 6, 7, 9 (reversed)
+pros::MotorGroup leftMotors({-6, -5, -4},pros::MotorGearset::blue); // left motor group - ports 3 (reversed), 4, 5 (reversed)
+pros::MotorGroup rightMotors({8, 9, 10}, pros::MotorGearset::blue); // right motor group - ports 6, 7, 9 (reversed)
 
 // Inertial Sensor on port 10
 pros::Imu imu(10);
@@ -16,14 +16,14 @@ pros::Imu imu(10);
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               &rightMotors, // right motor group
-                              10, // 10 inch track width
+                              10.625, // 10 inch track width
                               lemlib::Omniwheel::NEW_325, // using new 4" omnis
-                              480, // drivetrain rpm is 360
+                              450, // drivetrain rpm is 360
                               8 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(10, // proportional gain (kP)
+lemlib::ControllerSettings linearController(8, // proportional gain (kP)
                                             0, // integral gain (kI)
                                             3, // derivative gain (kD)
                                             3, // anti windup
@@ -35,10 +35,10 @@ lemlib::ControllerSettings linearController(10, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(2, // proportional gain (kP)
-                                             0, // integral gain (kI)
-                                             10, // derivative gain (kD)
-                                             3, // anti windup
+lemlib::ControllerSettings angularController(4.1, // proportional gain (kP)
+                                             .18, // integral gain (kI)
+                                             21, // derivative gain (kD)
+                                             10, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
                                              3, // large error range, in degrees
@@ -75,6 +75,8 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
+
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
@@ -93,6 +95,9 @@ void initialize() {
             // print robot location to the brain screen
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+
+            printf("X: %f", chassis.getPose().x); // x
+            printf("Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -100,6 +105,7 @@ void initialize() {
             pros::delay(50);
         }
     });
+
 }
 
 /**
@@ -112,9 +118,6 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-// get a path used for pure pursuit
-// this needs to be put outside a function
-ASSET(example_txt); // '.' replaced with "_" to make c++ happy
 
 /**
  * Runs during auto
@@ -122,6 +125,30 @@ ASSET(example_txt); // '.' replaced with "_" to make c++ happy
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 void autonomous() {
+    chassis.setPose(0,0,0);
+    pros::Task desmosTask([&]() {
+        // configure desmos logger
+        while(true){
+            // log position to desmos
+            printf("(%f, %f)\n", chassis.getPose().x, chassis.getPose().y);
+            // delay to save resources
+            pros::delay(50);
+        }
+    });
+    chassis.moveToPoint(0,6,1000,{},false);
+    chassis.moveToPoint(0,18,1000,{},false);
+    chassis.moveToPoint(0, 24, 1000,{},false); // move to (0,24) with a timeout of 1000ms
+    chassis.moveToPoint(0,0,1000,{.forwards = false},false);
+
+    /*chassis.setPose(0,0,0);
+    chassis.turnToHeading(45,999,{},false);
+    chassis.turnToHeading(90,999,{},false);
+    //chassis.turnToHeading(135,999,{},false);
+    chassis.turnToHeading(180,999,{},false);
+    chassis.turnToHeading(270,999,{},false);
+    chassis.turnToHeading(0,999,{},false);
+    chassis.turnToHeading(180,999,{},false);*/
+    
 }
 
 /**
@@ -130,6 +157,7 @@ void autonomous() {
 void opcontrol() {
     // controller
     // loop to continuously update motors
+    autonomous();
     while (true) {
         // get joystick positions
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
